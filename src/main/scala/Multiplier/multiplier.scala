@@ -5,7 +5,7 @@ import chisel3.util._
 import chisel3.stage.ChiselStage
 
 
-class multiplier extends Module with Topology {
+class multiplier extends Module with BaseData with Topology {
   val io = IO(new Bundle {
     val pipe1_clk = Input(Clock())
     val pipe2_clk = Input(Clock())
@@ -31,7 +31,7 @@ class multiplier extends Module with Topology {
 
   //n partial multiplier
 //  val part_product: Vec[UInt] = Wire(Vec(n, UInt((w + 1).W)))
-  val part_product_last: UInt = Wire(UInt(w.W))
+  val partProductLast: UInt = Wire(UInt(w.W))
 //  val h: Vec[UInt] = Wire(Vec(n, UInt(2.W)))
 //  val sign_not: Vec[UInt] = Wire(Vec(n, UInt(1.W)))
 //  val x_booth_code = Seq.fill(33)(Module(new booth_code(65)))
@@ -40,11 +40,12 @@ class multiplier extends Module with Topology {
 
   //for a-b*c(mult sub),regard multiplier as one part product
   when(io.sub_vld) {
-    part_product_last := Cat(0.U(2.W), io.multiplier(63, 0))
+    partProductLast := Cat(0.U(2.W), io.multiplier(63, 0))
   }.otherwise {
-    part_product_last := 0.U(66.W)
+    partProductLast := 0.U(66.W)
   }
-
+  // total n + 2 partial products
+  val partProducts: Vec[Value] = BCOutput2PProduct.toPProduct(w, boothCodeOutput, partProductLast)
   //----------------------------------------------------------
   //                    L1 compressor
   //----------------------------------------------------------
@@ -54,17 +55,17 @@ class multiplier extends Module with Topology {
   val p0, p1, p2, p3, p_cin, cout0 = Wire(Vec(8, UInt(75.W)))
   for (i <- 0 to 7) {
     if (i == 0) {
-      p0(i) := Seq(0.U(6.W), sign_not(i), Fill(2, !sign_not(i)), part_product(i)).reduce(Cat(_, _))
-      p1(i) := Seq(0.U(6.W), sign_not(i * 4 + 1), part_product(i * 4 + 1), h(i * 4)).reduce(Cat(_, _))
-      p2(i) := Seq(0.U(4.W), sign_not(i * 4 + 2), part_product(i * 4 + 2), h(i * 4 + 1), 0.U(2.W)).reduce(Cat(_, _))
-      p3(i) := Seq(0.U(2.W), sign_not(i * 4 + 3), part_product(i * 4 + 3), h(i * 4 + 2), 0.U(4.W)).reduce(Cat(_, _))
+      p0(i) := Seq(0.U(6.W), sign_not(i), Fill(2, !sign_not(i)), partProducts(i)).reduce(Cat(_, _))
+      p1(i) := Seq(0.U(6.W), sign_not(i * 4 + 1), partProducts(i * 4 + 1), h(i * 4)).reduce(Cat(_, _))
+      p2(i) := Seq(0.U(4.W), sign_not(i * 4 + 2), partProducts(i * 4 + 2), h(i * 4 + 1), 0.U(2.W)).reduce(Cat(_, _))
+      p3(i) := Seq(0.U(2.W), sign_not(i * 4 + 3), partProducts(i * 4 + 3), h(i * 4 + 2), 0.U(4.W)).reduce(Cat(_, _))
       p_cin(i) := Seq(0.U(2.W), cout0(i)(71, 0), 0.U(1.W)).reduce(Cat(_, _))
     }
     else {
-      p0(i) := Seq(0.U(6.W), sign_not(i * 4), part_product(i * 4), h(4 * i - 1)).reduce(Cat(_, _))
-      p1(i) := Seq(0.U(4.W), sign_not(i * 4 + 1), part_product(i * 4 + 1), h(i * 4), 0.U(2.W)).reduce(Cat(_, _))
-      p2(i) := Seq(0.U(2.W), sign_not(i * 4 + 2), part_product(i * 4 + 2), h(i * 4 + 1), 0.U(4.W)).reduce(Cat(_, _))
-      p3(i) := Seq(sign_not(i * 4 + 3), part_product(i * 4 + 3), h(i * 4 + 2), 0.U(6.W)).reduce(Cat(_, _))
+      p0(i) := Seq(0.U(6.W), sign_not(i * 4), partProducts(i * 4), h(4 * i - 1)).reduce(Cat(_, _))
+      p1(i) := Seq(0.U(4.W), sign_not(i * 4 + 1), partProducts(i * 4 + 1), h(i * 4), 0.U(2.W)).reduce(Cat(_, _))
+      p2(i) := Seq(0.U(2.W), sign_not(i * 4 + 2), partProducts(i * 4 + 2), h(i * 4 + 1), 0.U(4.W)).reduce(Cat(_, _))
+      p3(i) := Seq(sign_not(i * 4 + 3), partProducts(i * 4 + 3), h(i * 4 + 2), 0.U(6.W)).reduce(Cat(_, _))
       p_cin(i) := Seq(cout0(i)(73, 0), 0.U(1.W)).reduce(Cat(_, _))
     }
   }
@@ -109,8 +110,8 @@ class multiplier extends Module with Topology {
   q2(4) := Seq(s0(7)(74, 0), 0.U(8.W)).reduce(Cat(_, _))
 
   q0(5) := Seq(0.U(8.W), c0(7)(74, 0)).reduce(Cat(_, _))
-  q1(5) := Seq(0.U(8.W), part_product(32)(65, 0), h(31), 0.U(7.W)).reduce(Cat(_, _))
-  q2(5) := Seq(0.U(8.W), Fill(31, 2.U),0.U(2.W),  h(32), part_product(33)(63, 55)).reduce(Cat(_, _))
+  q1(5) := Seq(0.U(8.W), partProducts(32)(65, 0), h(31), 0.U(7.W)).reduce(Cat(_, _))
+  q2(5) := Seq(0.U(8.W), Fill(31, 2.U),0.U(2.W),  h(32), partProducts(33)(63, 55)).reduce(Cat(_, _))
 
   val s1, c1 = Wire(Vec(6, UInt(83.W)))
   val x_comp_2: Seq[Compressor32] = Seq.fill(6)(Module(new Compressor32(83)))
@@ -133,7 +134,7 @@ class multiplier extends Module with Topology {
         s_reg(i) := s1(i)
         c_reg(i) := c1(i)
       }
-      s_reg(6) := part_product(33)(54, 0)
+      s_reg(6) := partProducts(33)(54, 0)
     }.otherwise {
       for (i <- 0 to 5) {
         s_reg(i) := s_reg(i)

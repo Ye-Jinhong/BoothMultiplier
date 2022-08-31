@@ -97,18 +97,5 @@ object BoothCode{
   }
 }
 
-object BCOutput2PProduct {
-  def toPProduct(w: Int, bcOutput: Vec[BoothCodeOutput]): Vec[UInt] = {
-    val len = bcOutput.length
-    val pProduct: Vec[UInt] = Vec(len, UInt((w+4).W))
-    for(i <- len-1 to 0) {
-      if(i == 0) {
-        pProduct(i) := Cat()
-      }else if(i == len-1) {
 
-      }else {
 
-      }
-    }
-  }
-}
