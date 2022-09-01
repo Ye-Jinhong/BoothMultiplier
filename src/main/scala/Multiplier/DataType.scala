@@ -4,9 +4,10 @@ import chisel3._
 import chisel3.util._
 
 class Value(val w: Int) extends Bundle {
-  val value: UInt = Wire(UInt(w.W))
+  val value: UInt = UInt(w.W)
   //  var bitsnum: Int = w
-  var offset: Int = new Int
+  var offset: Int = 0
+
 }
 
 object Value {
@@ -16,9 +17,18 @@ object Value {
     v.offset = offset
     v
   }
+
   def apply(value: UInt, offset: Int): Value = {
     apply(value.getWidth, value, offset)
   }
+
+  //  def copy(other: Value):Value = {
+  //    val w = other.value.getWidth
+  //    val v = new Value(w)
+  //    v.offset = other.offset
+  //    v.value := other.value
+  //    v
+  //  }
 }
 
 

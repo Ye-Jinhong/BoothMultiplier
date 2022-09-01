@@ -87,9 +87,9 @@ object BoothCode{
     if(codewidth == 2){
       VecInit(BoothCodeUnit(w, A, Cat(code, 0.U(1.W))))
     }else if(codewidth % 2 == 0){
-      VecInit(VecInit(BoothCodeUnit(w, A, code(codewidth-1, codewidth-3))) +: apply(w, A, code(codewidth-3,0)))
+      VecInit(apply(w, A, code(codewidth - 3, 0)) :+ BoothCodeUnit(w, A, code(codewidth - 1, codewidth - 3)))
     }else{
-      VecInit(VecInit(BoothCodeUnit(w, A, Cat(code(codewidth-1), code(codewidth-1, codewidth-2)))) +: apply(w, A, code(codewidth-2,0)))
+      VecInit(apply(w, A, code(codewidth - 2, 0)) :+ BoothCodeUnit(w, A, Cat(code(codewidth - 1), code(codewidth - 1, codewidth - 2))))
     }
   }
   def apply(A: UInt, code: UInt): Vec[BoothCodeOutput] = {

@@ -34,8 +34,8 @@ class Compressor42(val w: Int) extends Module {
     val p1: UInt = Input(UInt(w.W))
     val p2: UInt = Input(UInt(w.W))
     val p3: UInt = Input(UInt(w.W))
-    val s: UInt = Input(UInt(w.W))
-    val ca: UInt = Input(UInt(w.W))
+    val s: UInt = Output(UInt(w.W))
+    val ca: UInt = Output(UInt(w.W))
   })
   val compressor42Unit: Compressor42Unit = Module(new Compressor42Unit(w))
   compressor42Unit.io.p0 := io.p0
@@ -47,26 +47,27 @@ class Compressor42(val w: Int) extends Module {
   io.ca := compressor42Unit.io.ca
 }
 
-object Compressor42{
-  def apply(p: Vec[Value]): CompressorOutput = {
-    val offsets: Seq[Int] = for(l <- p) yield l.offset
+object Compressor42 {
+  def apply(p: Seq[Value]): CompressorOutput = {
+    require(p.length == 4)
+    val offsets: Seq[Int] = for (l <- p) yield l.offset
     val offsetMin: Int = offsets.min
-    val width: Seq[Int] = for(w <- p) yield w.value.getWidth
-    val length: Seq[Int] = for(l <- offsets.zip(width)) yield l._1 + l._2
+    val width: Seq[Int] = for (w <- p) yield w.value.getWidth
+    val length: Seq[Int] = for (l <- offsets.zip(width)) yield l._1 + l._2
     val lengthSorted: Seq[Int] = length.sorted
-    val widthMax: Int = if(lengthSorted(3) > lengthSorted(0) && lengthSorted(3) > lengthSorted(1)) {
+    val widthMax: Int = if (lengthSorted(3) > lengthSorted(0) && lengthSorted(3) > lengthSorted(1)) {
       lengthSorted(3) - offsetMin
-    }else{
+    } else {
       lengthSorted(3) - offsetMin + 1
     }
     // Sort p by length
     val pSorted: Seq[(Value, Int)] = p.zip(length).sortBy(p0 => p0._2)
-
+    println(s"widthMax = ${widthMax}")
     val compressor42: Compressor42 = Module(new Compressor42(widthMax))
     compressor42.io.p0 := pSorted(0)._1.value
     compressor42.io.p1 := Cat(pSorted(1)._1.value, Fill(pSorted(1)._1.offset-offsetMin, 0.U(1.W)))
-    compressor42.io.p2 := Cat(pSorted(2)._1.value, Fill(pSorted(2)._1.offset-offsetMin, 0.U(1.W)))
-    compressor42.io.p3 := Cat(pSorted(3)._1.value, Fill(pSorted(3)._1.offset-offsetMin, 0.U(1.W)))
+    compressor42.io.p2 := Cat(pSorted(2)._1.value, Fill(pSorted(2)._1.offset - offsetMin, 0.U(1.W)))
+    compressor42.io.p3 := Cat(pSorted(3)._1.value, Fill(pSorted(3)._1.offset - offsetMin, 0.U(1.W)))
     val compressorOutput: CompressorOutput = new CompressorOutput(widthMax)
     compressorOutput.s.value := compressor42.io.s
     compressorOutput.ca.value := compressor42.io.ca
@@ -75,8 +76,13 @@ object Compressor42{
     compressorOutput
   }
 
-  def apply(p0: Value, p1: Value, p2: Value, p3: Value): CompressorOutput = {
-    val p = VecInit(p0, p1, p2, p3)
-    apply(p)
-  }
+  //  def apply(p0: Value, p1: Value, p2: Value, p3: Value): CompressorOutput = {
+  //    val p = VecInit(p0, p1, p2, p3)
+  //    apply(p)
+  //  }
+  //
+  //  def apply(p: Seq[Value]): CompressorOutput = {
+  //    require(p.length == 4)
+  //    apply(p(0), p(1), p(2), p(3))
+  //  }
 }

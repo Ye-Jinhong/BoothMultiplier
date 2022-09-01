@@ -18,7 +18,7 @@ class Compressor32(val w : Int) extends Module {
 }
 
 object Compressor32 {
-  def apply(in: Vec[Value]): CompressorOutput = {
+  def apply(in: Seq[Value]): CompressorOutput = {
     require(in.length == 3)
     val offsets: Seq[Int] = for (l <- in) yield l.offset
     val offsetMin: Int = offsets.min
@@ -38,8 +38,13 @@ object Compressor32 {
     compressorOutput.ca.offset = offsetMin + 1
     compressorOutput
   }
-  def apply(in1: Value, in2: Value, in3: Value): CompressorOutput = {
-    val in = VecInit(in1, in2, in3)
-    apply(in)
-  }
+  //  def apply(in1: Value, in2: Value, in3: Value): CompressorOutput = {
+  //    val in = VecInit(in1, in2, in3)
+  //    apply(in)
+  //  }
+  //
+  //  def apply(in: Seq[Value]): CompressorOutput = {
+  //    require(in.length == 3)
+  //    apply(in(0), in(1), in(2))
+  //  }
 }
