@@ -55,6 +55,7 @@ object Compressor42 {
     val width: Seq[Int] = for (w <- p) yield w.value.getWidth
     val length: Seq[Int] = for (l <- offsets.zip(width)) yield l._1 + l._2
     val lengthSorted: Seq[Int] = length.sorted
+//    println(s"${lengthSorted}")
     val widthMax: Int = if (lengthSorted(3) > lengthSorted(0) && lengthSorted(3) > lengthSorted(1)) {
       lengthSorted(3) - offsetMin
     } else {
@@ -62,13 +63,16 @@ object Compressor42 {
     }
     // Sort p by length
     val pSorted: Seq[(Value, Int)] = p.zip(length).sortBy(p0 => p0._2)
-    println(s"widthMax = ${widthMax}")
+//    println(s"widthMax = ${widthMax}")
     val compressor42: Compressor42 = Module(new Compressor42(widthMax))
     compressor42.io.p0 := pSorted(0)._1.value
-    compressor42.io.p1 := Cat(pSorted(1)._1.value, Fill(pSorted(1)._1.offset-offsetMin, 0.U(1.W)))
-    compressor42.io.p2 := Cat(pSorted(2)._1.value, Fill(pSorted(2)._1.offset - offsetMin, 0.U(1.W)))
-    compressor42.io.p3 := Cat(pSorted(3)._1.value, Fill(pSorted(3)._1.offset - offsetMin, 0.U(1.W)))
-    val compressorOutput: CompressorOutput = new CompressorOutput(widthMax)
+    if (pSorted(1)._1.offset-offsetMin == 0) compressor42.io.p1 := pSorted(1)._1.value
+    else compressor42.io.p1 := Cat(pSorted(1)._1.value, Fill(pSorted(1)._1.offset-offsetMin, 0.U(1.W)).asUInt)
+    if (pSorted(2)._1.offset-offsetMin == 0) compressor42.io.p2 := pSorted(2)._1.value
+    else compressor42.io.p2 := Cat(pSorted(2)._1.value, Fill(pSorted(2)._1.offset - offsetMin, 0.U(1.W)))
+    if (pSorted(3)._1.offset-offsetMin == 0) compressor42.io.p3 := pSorted(3)._1.value
+    else compressor42.io.p3 := Cat(pSorted(3)._1.value, Fill(pSorted(3)._1.offset - offsetMin, 0.U(1.W)))
+    val compressorOutput: CompressorOutput = Wire(new CompressorOutput(widthMax))
     compressorOutput.s.value := compressor42.io.s
     compressorOutput.ca.value := compressor42.io.ca
     compressorOutput.s.offset = offsetMin

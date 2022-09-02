@@ -42,3 +42,8 @@ class CompressorOutput(val w: Int) extends Bundle {
   }
 }
 
+//object CompressorOutput {
+//  def apply(w: Int, s: UInt, ca: UInt, offset: Int): CompressorOutput = {
+//    val sValue = Wire()
+//  }
+//}

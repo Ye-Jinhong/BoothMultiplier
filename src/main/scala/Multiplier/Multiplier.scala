@@ -5,19 +5,19 @@ import chisel3.util._
 import chisel3.stage.ChiselStage
 
 
-class multiplier extends Module with BaseData with Topology {
+class Multiplier extends Module with BaseData with Topology {
   require(connectCompressor.length == n + 2)
   val io = IO(new Bundle {
-    val pipe1_clk = Input(Clock())
-    val pipe2_clk = Input(Clock())
-    val cpurst_b: Bool = Input(Bool())
-    val pipe1_down = Input(Bool())
-    val pipe2_down = Input(Bool())
+//    val pipe1_clk = Input(Clock())
+//    val pipe2_clk = Input(Clock())
+//    val cpurst_b: Bool = Input(Bool())
+//    val pipe1_down = Input(Bool())
+//    val pipe2_down = Input(Bool())
     val multiplicand: UInt = Input(UInt(w.W))
     val multiplier: UInt = Input(UInt(w.W))
-    val addend = Input(UInt(w.W))
+//    val addend = Input(UInt(w.W))
     val sub_vld: Bool = Input(Bool())
-    val product = Output(UInt((2 * w).W))
+    val product: UInt = Output(UInt((2 * w).W))
   })
   val multiplicand_not: UInt = Wire(UInt(w.W))
 
@@ -48,6 +48,8 @@ class multiplier extends Module with BaseData with Topology {
 
   //  val out2 = Compressor(inputFromPP).filter(x => x._2 == compressorNum)
   val out2: Seq[Value] = for (o <- Compressor(inputFromPP) if o._2 == compressorNum - 1) yield o._1
+  printf(p"out2(0) = ${out2(0).value}\n")
+  printf(p"out2(1) = ${out2(1).value}\n")
   //----------------------------------------------------------
   //                    L6 compressor
   //----------------------------------------------------------
@@ -65,9 +67,16 @@ class multiplier extends Module with BaseData with Topology {
   //  s5_0 := x_comp5_0.io.s
   //  c5_0 := x_comp5_0.io.ca
   //  io.product := Cat(product_mult(129,64),product_mult_add(63,0))
-  io.product := Cat(out2(1).value, Fill(out2(1).offset, 0.U(1.W))) + Cat(out2(0).value, Fill(out2(0).offset, 0.U(1.W)))
+  if (out2(1).offset == 0 && out2(0).offset == 0)
+    io.product := out2(1).value + out2(0).value
+  else if (out2(1).offset == 0) {
+//    println(s"out2(1).offset == 0")
+    io.product := Cat(out2(1).value, Fill(out2(1).offset, 0.U(1.W))) + out2(0).value
+  }
+  else
+    io.product := Cat(out2(1).value, Fill(out2(1).offset, 0.U(1.W))) + Cat(out2(0).value, Fill(out2(0).offset, 0.U(1.W)))
 
-}
-object generator extends App{
-  (new ChiselStage).emitVerilog(new multiplier(), Array("-td", "--target-dir", s"generated/Multiplier"))
+  printf(p"io.multiplier = ${io.multiplier}\n")
+  printf(p"io.multiplicand = ${io.multiplicand}\n")
+  printf(p"io.product = ${io.product}\n")
 }

@@ -31,15 +31,15 @@ class Compressor extends Topology {
     if (a == b) {
       // to Compressor a
       val in0 = for (c <- topology if c._2 == a) yield c
-      println(s"$in0")
+//      println(s"$in0")
 
       // index where inputs from
       val in1 = for (i <- in0 if i._1._2 == 1) yield i._1._1
-      println(s"$in1")
+//      println(s"$in1")
       val in2 = for (i <- in0 if i._1._2 == 2) yield i._1._1
-      println(s"$in2")
+//      println(s"$in2")
       val in3 = for (i <- in0 if i._1._2 == 3) yield i._1._1
-      println(s"$in3")
+//      println(s"$in3")
       var in: Seq[Value] = Seq()
       for (i <- in1) {
         in = in :+ input.filter(x => x._2 == i).head._1
@@ -61,7 +61,7 @@ class Compressor extends Topology {
 
 object Compressor {
   def apply(in: Seq[Value]): CompressorOutput = {
-    println(s"length = ${in.length}")
+//    println(s"length = ${in.length}")
     require(in.length == 3 || in.length == 4)
     if (in.length == 3) Compressor32(in)
     else Compressor42(in)

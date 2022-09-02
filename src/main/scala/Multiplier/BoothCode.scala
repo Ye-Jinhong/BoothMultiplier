@@ -22,47 +22,42 @@ class BoothCodeUnit(val w: Int) extends Module {
   val A_sign : UInt = Wire(UInt(1.W))
   A_sign := io.A(w-1)
 
-  switch(io.code) {
-    is("b000".U) {
-      io.boothCodeOutput.product := 0.U((w + 1).W)
-      io.boothCodeOutput.sn := "b1".U
-      io.boothCodeOutput.h := "b00".U
-    }
-    is("b001".U) {
-      io.boothCodeOutput.product := Cat(A_sign, io.A)
-      io.boothCodeOutput.sn := (~A_sign).asUInt
-      io.boothCodeOutput.h := "b00".U
-    }
-    is("b010".U) {
-      io.boothCodeOutput.product := Cat(A_sign, io.A)
-      io.boothCodeOutput.sn := (~A_sign).asUInt
-      io.boothCodeOutput.h := "b00".U
-    }
-    is("b011".U) {
-      io.boothCodeOutput.product := Cat(io.A, "b0".U)
-      io.boothCodeOutput.sn := (~A_sign).asUInt
-      io.boothCodeOutput.h := "b00".U
-    }
-    is("b100".U) {
-      io.boothCodeOutput.product := Cat(~io.A, "b1".U)
-      io.boothCodeOutput.sn := A_sign
-      io.boothCodeOutput.h := "b01".U
-    }
-    is("b101".U) {
-      io.boothCodeOutput.product := Cat(~A_sign, ~io.A)
-      io.boothCodeOutput.sn := A_sign
-      io.boothCodeOutput.h := "b01".U
-    }
-    is("b110".U) {
-      io.boothCodeOutput.product := Cat(~A_sign, ~io.A)
-      io.boothCodeOutput.sn := A_sign
-      io.boothCodeOutput.h := "b01".U
-    }
-    is("b111".U) {
-      io.boothCodeOutput.product := 0.U((w + 1).W)
-      io.boothCodeOutput.sn := "b1".U
-      io.boothCodeOutput.h := "b00".U
-    }
+  when(io.code === "b000".U) {
+    io.boothCodeOutput.product := 0.U((w+1).W)
+    io.boothCodeOutput.sn := "b1".U
+    io.boothCodeOutput.h := "b00".U
+  }.elsewhen(io.code === "b001".U) {
+    io.boothCodeOutput.product := Cat(A_sign, io.A)
+    io.boothCodeOutput.sn := ~A_sign
+    io.boothCodeOutput.h := "b00".U
+  }.elsewhen(io.code === "b010".U) {
+    io.boothCodeOutput.product := Cat(A_sign, io.A)
+    io.boothCodeOutput.sn := ~A_sign
+    io.boothCodeOutput.h := "b00".U
+  }.elsewhen(io.code === "b011".U) {
+    io.boothCodeOutput.product := Cat(io.A, "b0".U)
+    io.boothCodeOutput.sn := ~A_sign
+    io.boothCodeOutput.h := "b00".U
+  }.elsewhen(io.code === "b100".U) {
+    io.boothCodeOutput.product := Cat(~io.A, "b1".U)
+    io.boothCodeOutput.sn := A_sign
+    io.boothCodeOutput.h := "b01".U
+  }.elsewhen(io.code === "b101".U) {
+    io.boothCodeOutput.product := Cat(~A_sign, ~io.A)
+    io.boothCodeOutput.sn := A_sign
+    io.boothCodeOutput.h := "b01".U
+  }.elsewhen(io.code === "b110".U) {
+    io.boothCodeOutput.product := Cat(~A_sign, ~io.A)
+    io.boothCodeOutput.sn := A_sign
+    io.boothCodeOutput.h := "b01".U
+  }.elsewhen(io.code === "b111".U) {
+    io.boothCodeOutput.product := 0.U((w+1).W)
+    io.boothCodeOutput.sn := "b1".U
+    io.boothCodeOutput.h := "b00".U
+  }.otherwise{
+    io.boothCodeOutput.product := 0.U((w+1).W)
+    io.boothCodeOutput.sn := "b1".U
+    io.boothCodeOutput.h := "b00".U
   }
 }
 
@@ -71,6 +66,7 @@ object BoothCodeUnit{
     val boothCodeUnit = Module(new BoothCodeUnit(w))
     boothCodeUnit.io.A := A
     boothCodeUnit.io.code := code
+//    printf(p"boothcode out = ${boothCodeUnit.io.boothCodeOutput}\n")
     boothCodeUnit.io.boothCodeOutput
   }
   def apply(A: UInt, code: UInt): BoothCodeOutput = {

@@ -14,7 +14,7 @@ class Compressor32(val w : Int) extends Module {
   })
 
   io.s := io.a ^ io.b ^ io.cin
-  io.ca := io.a & io.b | io.a & io.cin | io.b & io.cin
+  io.ca := (io.a & io.b) | (io.a & io.cin) | (io.b & io.cin)
 }
 
 object Compressor32 {
@@ -25,26 +25,22 @@ object Compressor32 {
     val width: Seq[Int] = for (w <- in) yield w.value.getWidth
     val length: Seq[Int] = for (l <- offsets.zip(width)) yield l._1 + l._2
     val lengthMax: Int = length.max - offsetMin
-
+//    println(s"length32 = ${length}")
+    // Sort p by length
+    val inSorted: Seq[(Value, Int)] = in.zip(length).sortBy(p0 => p0._2)
     val compressor32: Compressor32 = Module(new Compressor32(lengthMax))
+    if(inSorted(0)._1.offset - offsetMin == 0) compressor32.io.a := inSorted(0)._1.value
+    else compressor32.io.a := Cat(inSorted(0)._1.value, Fill(inSorted(0)._1.offset - offsetMin, 0.U(1.W)))
+    if(inSorted(1)._1.offset - offsetMin == 0) compressor32.io.b := inSorted(1)._1.value
+    else compressor32.io.b := Cat(inSorted(1)._1.value, Fill(inSorted(1)._1.offset - offsetMin, 0.U(1.W)))
+    if(inSorted(2)._1.offset - offsetMin == 0) compressor32.io.cin := inSorted(2)._1.value
+    else compressor32.io.cin := Cat(inSorted(2)._1.value, Fill(inSorted(2)._1.offset - offsetMin, 0.U(1.W)))
 
-    compressor32.io.a := Cat(in(0).value, Fill(in(0).offset - offsetMin, 0.U(1.W)))
-    compressor32.io.b := Cat(in(1).value, Fill(in(1).offset - offsetMin, 0.U(1.W)))
-    compressor32.io.cin := Cat(in(2).value, Fill(in(2).offset - offsetMin, 0.U(1.W)))
-    val compressorOutput: CompressorOutput = new CompressorOutput(lengthMax)
+    val compressorOutput: CompressorOutput = Wire(new CompressorOutput(lengthMax))
     compressorOutput.s.value := compressor32.io.s
     compressorOutput.ca.value := compressor32.io.ca
     compressorOutput.s.offset = offsetMin
     compressorOutput.ca.offset = offsetMin + 1
     compressorOutput
   }
-  //  def apply(in1: Value, in2: Value, in3: Value): CompressorOutput = {
-  //    val in = VecInit(in1, in2, in3)
-  //    apply(in)
-  //  }
-  //
-  //  def apply(in: Seq[Value]): CompressorOutput = {
-  //    require(in.length == 3)
-  //    apply(in(0), in(1), in(2))
-  //  }
 }
