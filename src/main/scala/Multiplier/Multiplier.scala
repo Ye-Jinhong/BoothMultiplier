@@ -69,7 +69,7 @@ class Multiplier extends Module with BaseData with Topology {
   //  io.product := Cat(product_mult(129,64),product_mult_add(63,0))
   if (out2(1).offset == 0 && out2(0).offset == 0)
     io.product := out2(1).value + out2(0).value
-  else if (out2(1).offset == 0) {
+  else if (out2(0).offset == 0) {
 //    println(s"out2(1).offset == 0")
     io.product := Cat(out2(1).value, Fill(out2(1).offset, 0.U(1.W))) + out2(0).value
   }

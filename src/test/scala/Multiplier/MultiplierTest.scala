@@ -9,10 +9,10 @@ import scala.util.Random
 
 class MultiplierTest extends AnyFreeSpec with ChiselScalatestTester {
   "Calculate should pass" in {
-    val multiplier: Long = Random.nextLong(1 << 20)
+    val multiplier: Long = Random.nextLong(1 << 60)
 //    val multiplier = 0
     println(s"multiplier = ${multiplier}")
-    val multiplicand: Long = Random.nextLong(1 << 20)
+    val multiplicand: Long = Random.nextLong(1 << 60)
 //    val multiplicand = 0
     println(s"multiplicand = ${multiplicand}")
     val product: Long = multiplier * multiplicand

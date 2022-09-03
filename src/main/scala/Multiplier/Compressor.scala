@@ -6,12 +6,6 @@ import chisel3.util._
 import scala.:+
 
 class Compressor extends Topology {
-  val layer: Seq[Seq[Int]] = Seq(
-    Seq(0, 1, 2, 3, 4, 5, 6, 7),
-    Seq(8, 9, 10, 11, 12, 13),
-    Seq(14, 15, 16),
-    Seq(17, 18),
-    Seq(19))
   val layerNum: Int = layer.length
 
   def genLayer(n: Int, input: Seq[(Value, Int)]): Seq[(Value, Int)] = {
@@ -49,9 +43,14 @@ class Compressor extends Topology {
       }
       for (i <- in3) {
         in = (for (x <- input if x._2 == i) yield x._1) ++ in
+//        println(s"inin = $in")
       }
+//      in.foreach(x => printf(p"in = ${x.value}, ${x.offset}\n"))
+//      printf(p"in = ${in}\n")
       val outs = Compressor(in)
-      for (i <- outs.toVec) yield (i, a)
+//      printf(p"offsets = ${outs.s.offset}\n")
+//      printf(p"offsetca = ${outs.ca.offset}\n")
+      for (i <- outs.toSeq) yield (i, a)
     } else {
       genCompressor(a, b - 1, input, topology) ++ genCompressor(b, b, input, topology)
     }

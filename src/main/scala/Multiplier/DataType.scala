@@ -36,9 +36,11 @@ object Value {
 class CompressorOutput(val w: Int) extends Bundle {
   val s: Value = new Value(w)
   val ca: Value = new Value(w)
-  def toVec: Vec[Value] = {
-    val outVec = VecInit(s, ca)
-    outVec
+  def toSeq: Seq[Value] = {
+//    printf(p"ca offset = ${ca.offset}\n")
+    val outSeq = Seq(s, ca)
+//    printf(p"Vec ca offset = ${outSeq(1).offset}\n")
+    outSeq
   }
 }
 

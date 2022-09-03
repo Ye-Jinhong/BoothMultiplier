@@ -12,9 +12,13 @@ class Compressor32(val w : Int) extends Module {
     val s: UInt = Output(UInt(w.W))
     val ca: UInt = Output(UInt(w.W))
   })
-
+//  printf(p"compressorOutput32.a = ${io.a}\n")
+//  printf(p"compressorOutput32.b = ${io.b}\n")
+//  printf(p"compressorOutput32.cin = ${io.cin}\n")
   io.s := io.a ^ io.b ^ io.cin
+//  printf(p"compressorOutput32.s = ${io.s}\n")
   io.ca := (io.a & io.b) | (io.a & io.cin) | (io.b & io.cin)
+//  printf(p"compressorOutput32.ca = ${io.ca}\n")
 }
 
 object Compressor32 {
@@ -41,6 +45,8 @@ object Compressor32 {
     compressorOutput.ca.value := compressor32.io.ca
     compressorOutput.s.offset = offsetMin
     compressorOutput.ca.offset = offsetMin + 1
+//    printf(p"offset32s = ${compressorOutput.s.offset}\n")
+//    printf(p"offset32ca = ${compressorOutput.ca.offset}\n")
     compressorOutput
   }
 }

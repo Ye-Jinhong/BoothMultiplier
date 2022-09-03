@@ -45,12 +45,15 @@ class Compressor42(val w: Int) extends Module {
   compressor42Unit.io.cin := Cat(compressor42Unit.io.cout(w-2,0), 0.U(1.W))
   io.s := compressor42Unit.io.s
   io.ca := compressor42Unit.io.ca
+//  printf(p"42s = ${compressor42Unit.io.s}\n")
+//  printf(p"42ca = ${compressor42Unit.io.ca}\n")
 }
 
 object Compressor42 {
   def apply(p: Seq[Value]): CompressorOutput = {
     require(p.length == 4)
     val offsets: Seq[Int] = for (l <- p) yield l.offset
+//    println(s"offsets = ${offsets}")
     val offsetMin: Int = offsets.min
     val width: Seq[Int] = for (w <- p) yield w.value.getWidth
     val length: Seq[Int] = for (l <- offsets.zip(width)) yield l._1 + l._2
@@ -61,6 +64,7 @@ object Compressor42 {
     } else {
       lengthSorted(3) - offsetMin + 1
     }
+//    printf(p"offsetmin = ${offsetMin}\n")
     // Sort p by length
     val pSorted: Seq[(Value, Int)] = p.zip(length).sortBy(p0 => p0._2)
 //    println(s"widthMax = ${widthMax}")
@@ -72,6 +76,13 @@ object Compressor42 {
     else compressor42.io.p2 := Cat(pSorted(2)._1.value, Fill(pSorted(2)._1.offset - offsetMin, 0.U(1.W)))
     if (pSorted(3)._1.offset-offsetMin == 0) compressor42.io.p3 := pSorted(3)._1.value
     else compressor42.io.p3 := Cat(pSorted(3)._1.value, Fill(pSorted(3)._1.offset - offsetMin, 0.U(1.W)))
+//    printf(p"p0 = ${compressor42.io.p0}\n")
+//    printf(p"p1 = ${compressor42.io.p1}\n")
+//    printf(p"offset1 = ${pSorted(1)._1.offset-offsetMin}\n")
+//    printf(p"p2 = ${compressor42.io.p2}\n")
+//    printf(p"offset2 = ${pSorted(2)._1.offset-offsetMin}\n")
+//    printf(p"p3 = ${compressor42.io.p3}\n")
+//    printf(p"offset3 = ${pSorted(3)._1.offset-offsetMin}\n")
     val compressorOutput: CompressorOutput = Wire(new CompressorOutput(widthMax))
     compressorOutput.s.value := compressor42.io.s
     compressorOutput.ca.value := compressor42.io.ca
