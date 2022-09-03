@@ -13,11 +13,11 @@ class Multiplier extends Module with BaseData with Topology {
 //    val cpurst_b: Bool = Input(Bool())
 //    val pipe1_down = Input(Bool())
 //    val pipe2_down = Input(Bool())
-    val multiplicand: UInt = Input(UInt(w.W))
-    val multiplier: UInt = Input(UInt(w.W))
+    val multiplicand: SInt = Input(SInt(w.W))
+    val multiplier: SInt = Input(SInt(w.W))
 //    val addend = Input(UInt(w.W))
     val sub_vld: Bool = Input(Bool())
-    val product: UInt = Output(UInt((2 * w).W))
+    val product: SInt = Output(SInt((2 * w).W))
   })
   val multiplicand_not: UInt = Wire(UInt(w.W))
 
@@ -25,20 +25,20 @@ class Multiplier extends Module with BaseData with Topology {
   ////  (~multiplicand + 1) * multiplier
   ////= ~multiplicand * multiplier + multiplier
   when(io.sub_vld) {
-    multiplicand_not := ~io.multiplicand
+    multiplicand_not := (~io.multiplicand).asUInt
   }.otherwise {
-    multiplicand_not := io.multiplicand
+    multiplicand_not := io.multiplicand.asUInt
   }
 
   //n partial multiplier
   //  val part_product: Vec[UInt] = Wire(Vec(n, UInt((w + 1).W)))
   val partProductLast: UInt = Wire(UInt((w - 1).W))
 
-  val boothCodeOutput: Vec[BoothCodeOutput] = BoothCode(w, multiplicand_not, io.multiplier)
+  val boothCodeOutput: Vec[BoothCodeOutput] = BoothCode(w, multiplicand_not, io.multiplier.asUInt)
 
   //for a-b*c(mult sub),regard multiplier as one part product
   when(io.sub_vld) {
-    partProductLast := io.multiplier(w - 2, 0)
+    partProductLast := (io.multiplier(w - 2, 0)).asUInt
   }.otherwise {
     partProductLast := 0.U((w - 1).W)
   }
@@ -71,7 +71,7 @@ class Multiplier extends Module with BaseData with Topology {
     io.product := out2(1).value + out2(0).value
   else if (out2(0).offset == 0) {
 //    println(s"out2(1).offset == 0")
-    io.product := Cat(out2(1).value, Fill(out2(1).offset, 0.U(1.W))) + out2(0).value
+    io.product := (Cat(out2(1).value, Fill(out2(1).offset, 0.U(1.W))) + out2(0).value).asSInt
   }
   else
     io.product := Cat(out2(1).value, Fill(out2(1).offset, 0.U(1.W))) + Cat(out2(0).value, Fill(out2(0).offset, 0.U(1.W)))
