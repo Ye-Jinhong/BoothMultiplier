@@ -2,7 +2,6 @@ package Multiplier
 
 import chisel3._
 import chisel3.util._
-import chisel3.stage.ChiselStage
 
 
 class Multiplier extends Module with BaseData with Topology {
@@ -15,7 +14,7 @@ class Multiplier extends Module with BaseData with Topology {
 //    val pipe2_down = Input(Bool())
     val multiplicand: SInt = Input(SInt(w.W))
     val multiplier: SInt = Input(SInt(w.W))
-//    val addend = Input(UInt(w.W))
+    val addend: SInt = Input(SInt(w.W))
     val sub_vld: Bool = Input(Bool())
     val product: SInt = Output(SInt((2 * w).W))
   })
@@ -38,7 +37,7 @@ class Multiplier extends Module with BaseData with Topology {
 
   //for a-b*c(mult sub),regard multiplier as one part product
   when(io.sub_vld) {
-    partProductLast := (io.multiplier(w - 2, 0)).asUInt
+    partProductLast := io.multiplier(w - 2, 0).asUInt
   }.otherwise {
     partProductLast := 0.U((w - 1).W)
   }
@@ -47,34 +46,22 @@ class Multiplier extends Module with BaseData with Topology {
   var inputFromPP: Seq[(Value, Int)] = for (pp <- partProducts.zipWithIndex) yield (pp._1, -pp._2 - 1)
 
   //  val out2 = Compressor(inputFromPP).filter(x => x._2 == compressorNum)
-  val out2: Seq[Value] = for (o <- Compressor(inputFromPP) if o._2 == compressorNum - 1) yield o._1
-  printf(p"out2(0) = ${out2(0).value}\n")
-  printf(p"out2(1) = ${out2(1).value}\n")
-  //----------------------------------------------------------
-  //                    L6 compressor
-  //----------------------------------------------------------
-  // sixth level compressor:
-  // components: 1 3:2 compressor
-  // result: 3 partial products -> 2 paritial products
-  //  val s5_0,c5_0,product_mult_add = Wire( UInt(64.W))
-  //  val product_mult = Wire( UInt(130.W))
-  //  val x_comp5_0 = Module(new Compressor32(64))
-  //  product_mult :=  sum_wire + Cat(carry_wire(128,0),0.U(1.W))
-  //  product_mult_add := s5_0(63,0) + Cat(c5_0(62,0),0.U(1.W))
-  //  x_comp5_0.io.a := w0(0)
-  //  x_comp5_0.io.b := w0(1)
-  //  x_comp5_0.io.cin := w0(2)
-  //  s5_0 := x_comp5_0.io.s
-  //  c5_0 := x_comp5_0.io.ca
-  //  io.product := Cat(product_mult(129,64),product_mult_add(63,0))
-  if (out2(1).offset == 0 && out2(0).offset == 0)
-    io.product := out2(1).value + out2(0).value
-  else if (out2(0).offset == 0) {
-//    println(s"out2(1).offset == 0")
-    io.product := (Cat(out2(1).value, Fill(out2(1).offset, 0.U(1.W))) + out2(0).value).asSInt
-  }
-  else
-    io.product := Cat(out2(1).value, Fill(out2(1).offset, 0.U(1.W))) + Cat(out2(0).value, Fill(out2(0).offset, 0.U(1.W)))
+  val compressorOutLast: Seq[Value] = for (o <- Compressor(inputFromPP) if o._2 == compressorNum - 1) yield o._1
+  require(compressorOutLast(1).offset == 1 && compressorOutLast(0).offset == 0)
+  val sum: UInt = Wire(UInt((2 * w).W))
+  val carry: UInt = Wire(UInt((2 * w).W))
+  sum := compressorOutLast(0).value
+  carry := compressorOutLast(1).value
+
+  val compressor32Out: CompressorOutput = AddAddend(w, sum, carry, io.addend)
+  val productMult: UInt = Wire(UInt((2 * w).W))
+  val productMultAdd: UInt = Wire(UInt((w - 1).W))
+  productMult := (carry << 1).asUInt + sum
+  productMultAdd := (compressor32Out.ca.value << 1).asUInt + compressor32Out.s.value
+
+
+
+  io.product := Cat(productMult(2*w-1,w-1),productMultAdd(w-2,0)).asSInt
 
   printf(p"io.multiplier = ${io.multiplier}\n")
   printf(p"io.multiplicand = ${io.multiplicand}\n")

@@ -21,6 +21,7 @@ class MultiplierTest extends AnyFreeSpec with ChiselScalatestTester with BaseDat
       c.io.multiplier.poke(multiplier.asSInt(w.W))
       c.io.multiplicand.poke(multiplicand.asSInt(w.W))
       c.io.sub_vld.poke(false.B)
+      c.io.addend.poke(0.asSInt)
       c.clock.step(1)
       c.io.product.expect(product.asSInt((2*w).W))
     }
