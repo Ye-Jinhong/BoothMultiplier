@@ -9,19 +9,32 @@ import scala.util.Random
 
 class MultiplierTest extends AnyFreeSpec with ChiselScalatestTester with BaseData {
   "Calculate should pass" in {
+    val sub: Boolean = (Random.nextInt % 2 == 1)
+    println(s"sub = ${sub}")
     val multiplier: Long = Random.nextInt
 //    val multiplier = -1
     println(s"multiplier = ${multiplier}")
     val multiplicand: Long = Random.nextInt
 //    val multiplicand = -1
     println(s"multiplicand = ${multiplicand}")
-    val product: Long = multiplier * multiplicand
+    val addend: Int = Random.nextInt
+    println(s"addend = ${addend}")
+    val product: Long = if(!sub) multiplier * multiplicand + addend else addend - multiplier * multiplicand
     println(s"product = ${product}")
     test(new Multiplier()){ c =>
       c.io.multiplier.poke(multiplier.asSInt(w.W))
       c.io.multiplicand.poke(multiplicand.asSInt(w.W))
-      c.io.sub_vld.poke(false.B)
-      c.io.addend.poke(0.asSInt)
+      c.io.sub_vld.poke(sub.B)
+      c.io.addend.poke(addend.asSInt((w-1).W))
+      if (c.isPipeline) {
+//        c.io.cpurst_b.poke(false.B)
+        c.clock.step(1)
+//        c.io.cpurst_b.poke(true.B)
+        c.io.down(0).poke(true.B)
+        c.clock.step(1)
+        c.io.down(1).poke(true.B)
+        c.clock.step(1)
+      }
       c.clock.step(1)
       c.io.product.expect(product.asSInt((2*w).W))
     }

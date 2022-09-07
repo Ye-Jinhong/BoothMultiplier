@@ -13,4 +13,20 @@ object AddAddend {
     compressor32In(2).offset = 0
     Compressor32(compressor32In)
   }
+  def apply(w: Int, down: Bool, sum: UInt, carry: UInt, addend: SInt): CompressorOutput = {
+    val compressor32In: Vec[Value] = Wire(Vec(3, new Value(w - 1)))
+    val addendReg = RegInit(0.U((w - 1).W))
+    when(down) {
+      addendReg := addend.asUInt
+    }.otherwise {
+      addendReg := addendReg
+    }
+    compressor32In(0).value := sum
+    compressor32In(0).offset = 0
+    compressor32In(1).value := carry
+    compressor32In(1).offset = 1
+    compressor32In(2).value := addendReg
+    compressor32In(2).offset = 0
+    Compressor32(compressor32In)
+  }
 }

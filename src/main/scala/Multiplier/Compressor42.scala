@@ -45,8 +45,6 @@ class Compressor42(val w: Int) extends Module {
   compressor42Unit.io.cin := Cat(compressor42Unit.io.cout(w-2,0), 0.U(1.W))
   io.s := compressor42Unit.io.s
   io.ca := compressor42Unit.io.ca
-//  printf(p"42s = ${compressor42Unit.io.s}\n")
-//  printf(p"42ca = ${compressor42Unit.io.ca}\n")
 }
 
 object Compressor42 {

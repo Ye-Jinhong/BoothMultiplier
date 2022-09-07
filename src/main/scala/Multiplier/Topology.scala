@@ -5,7 +5,7 @@ trait BaseData {
   val w = 65
   val odd: Boolean = w % 2 == 1
   val n: Int = if (odd) (w + 1) / 2 else w / 2
-
+  val isPipeline: Boolean = true
 }
 
 trait Topology extends BaseData {
@@ -33,6 +33,11 @@ trait Topology extends BaseData {
   Seq(14, 15, 16),
   Seq(17, 18),
   Seq(19))
+
+  val pipeline: Seq[(Int, Int)] = Seq((1, 0), (4, 1))
+//  val pipeline: Seq[(Int, Int)] = Seq((1, 0))
+  val isLastLayerPipe: Boolean = (pipeline.last._1 == layer.length - 1) && isPipeline
+
 }
 
 
