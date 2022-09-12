@@ -3,31 +3,6 @@ package Multiplier
 import chisel3._
 import chisel3.util._
 
-
-
-class Compressor42Unit(val w: Int) extends Module {
-  val io = IO(new Bundle() {
-    val p0: UInt = Input(UInt(w.W))
-    val p1: UInt = Input(UInt(w.W))
-    val p2: UInt = Input(UInt(w.W))
-    val p3: UInt = Input(UInt(w.W))
-    val cin: UInt = Input(UInt(w.W))
-    val s: UInt = Output(UInt(w.W))
-    val ca: UInt = Output(UInt(w.W))
-    val cout: UInt = Output(UInt(w.W))
-  })
-  val xor0: UInt = Wire(UInt(w.W))
-  val xor1: UInt = Wire(UInt(w.W))
-  val xor2: UInt = Wire(UInt(w.W))
-
-  xor0 := io.p0 ^ io.p1
-  xor1 := io.p2 ^ io.p3
-  xor2 := xor1 ^ xor0
-
-  io.cout := xor0 & io.p2 | ((~xor0).asUInt & io.p0)
-  io.s := xor2 ^ io.cin
-  io.ca := xor2 & io.cin | ((~xor2).asUInt & io.p3)
-}
 class Compressor42(val w: Int) extends Module {
   val io = IO(new Bundle() {
     val p0: UInt = Input(UInt(w.W))
@@ -37,14 +12,20 @@ class Compressor42(val w: Int) extends Module {
     val s: UInt = Output(UInt(w.W))
     val ca: UInt = Output(UInt(w.W))
   })
-  val compressor42Unit: Compressor42Unit = Module(new Compressor42Unit(w))
-  compressor42Unit.io.p0 := io.p0
-  compressor42Unit.io.p1 := io.p1
-  compressor42Unit.io.p2 := io.p2
-  compressor42Unit.io.p3 := io.p3
-  compressor42Unit.io.cin := Cat(compressor42Unit.io.cout(w-2,0), 0.U(1.W))
-  io.s := compressor42Unit.io.s
-  io.ca := compressor42Unit.io.ca
+  val xor0: UInt = Wire(UInt(w.W))
+  val xor1: UInt = Wire(UInt(w.W))
+  val xor2: UInt = Wire(UInt(w.W))
+  val cout: UInt= Wire(UInt(w.W))
+  val cin: UInt = Wire(UInt(w.W))
+
+  cin := Cat(cout(w - 2, 0), 0.U(1.W))
+  xor0 := io.p0 ^ io.p1
+  xor1 := io.p2 ^ io.p3
+  xor2 := xor1 ^ xor0
+
+  cout := xor0 & io.p2 | ((~xor0).asUInt & io.p0)
+  io.s := xor2 ^ cin
+  io.ca := xor2 & cin | ((~xor2).asUInt & io.p3)
 }
 
 object Compressor42 {

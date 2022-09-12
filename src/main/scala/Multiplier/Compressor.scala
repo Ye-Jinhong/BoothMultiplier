@@ -9,7 +9,7 @@ class Compressor extends Topology {
 
   def genLayer(l: Int, input: Seq[(Value, Int)]): Seq[(Value, Int)] = {
     // topology -> ((from where, connect type), to where)
-    // input -> ((value, from where), not used)
+    // input -> (value, from where)
     val compressorIndex: Seq[Int] = layer(l)
     val t: Seq[((Int, Int), Int)] = topologyAll.filter(t => compressorIndex.contains(t._2))
     genCompressor(compressorIndex.head, compressorIndex.last, input, t)
