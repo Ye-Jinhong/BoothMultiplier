@@ -8,7 +8,6 @@ class Multiplier extends Module with BaseData with Topology {
   require(connectCompressor.length == n + 2)
   val io = IO(new Bundle {
     val down: Vec[Bool] = if (isPipeline) Input(Vec(pipeline.length, Bool())) else null
-//    val cpurst_b: Bool = if(isPipeline) Input(Bool()) else null
     val multiplicand: SInt = Input(SInt(w.W))
     val multiplier: SInt = Input(SInt(w.W))
     val addend: SInt = Input(SInt(w.W))
@@ -17,9 +16,9 @@ class Multiplier extends Module with BaseData with Topology {
   })
   val multiplicand_not: UInt = Wire(UInt(w.W))
 
-  ////for calculate a-b*c, mult calculate can be extend as:
-  ////  (~multiplicand + 1) * multiplier
-  ////= ~multiplicand * multiplier + multiplier
+  //for calculate a-b*c, mult calculate can be extend as:
+  //  (~multiplicand + 1) * multiplier
+  //= ~multiplicand * multiplier + multiplier
   when(io.sub_vld) {
     multiplicand_not := (~io.multiplicand).asUInt
   }.otherwise {
@@ -70,7 +69,5 @@ class Multiplier extends Module with BaseData with Topology {
 
   io.product := Cat(productMult(2*w-1,w-1),productMultAdd(w-2,0)).asSInt
 
-  printf(p"io.multiplier = ${io.multiplier}\n")
-  printf(p"io.multiplicand = ${io.multiplicand}\n")
   printf(p"io.product = ${io.product}\n")
 }

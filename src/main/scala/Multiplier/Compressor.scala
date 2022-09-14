@@ -11,27 +11,31 @@ class Compressor extends Topology {
     // topology -> ((from where, connect type), to where)
     // input -> (value, from where)
     val compressorIndex: Seq[Int] = layer(l)
+    // Find all the connections that output is in layer l
     val t: Seq[((Int, Int), Int)] = topologyAll.filter(t => compressorIndex.contains(t._2))
     genCompressor(compressorIndex.head, compressorIndex.last, input, t)
   }
 
   def genCompressor(a: Int, b: Int, input: Seq[(Value, Int)], topology: Seq[((Int, Int), Int)]): Seq[(Value, Int)] = {
-    // topology -> ((from where, connect type), to where)
     // input -> (value, from where)
+    // topology -> ((from where, connect type), to where)
     // return -> (value, from where)
     require(a <= b)
     if (a == b) {
-      // to Compressor a
+      // Instantiate Compressor a
       // t0 -> ((from where, connect type), to where)
+      // Find all the connections that output is Compressor a
       val t0 = for (c <- topology if c._2 == a) yield c
       val inputIndex: Seq[((Value, Int), Int)] = input.zipWithIndex
 
-      // index where inputs from
+      // Index where inputs from
       val in1 = for (i <- t0 if i._1._2 == 1) yield i._1._1
       val in2 = for (i <- t0 if i._1._2 == 2) yield i._1._1
       val in3 = for (i <- t0 if i._1._2 == 3) yield i._1._1
+
       var in: Seq[Value] = Seq()
       var inIndex: Seq[Int] = Seq()
+      // The inputs that do not be used
       var inRemains: Seq[(Value, Int)] = Seq()
 
       for (i <- in1) {
@@ -46,17 +50,13 @@ class Compressor extends Topology {
         in = (for (x <- input if x._2 == i) yield x._1) ++ in
         inIndex = (for(x <- inputIndex if x._1._2 == i) yield x._2) ++ inIndex
       }
-//      in.foreach(x => printf(p"in = ${x.value}, ${x.offset}\n"))
-//      printf(p"in = ${in}\n")
+      // Instantiate Compressor
       val outs = Compressor(in)
-//      printf(p"offsets = ${outs.s.offset}\n")
-//      printf(p"offsetca = ${outs.ca.offset}\n")
+      // Output all the values that remained
       inRemains = for(i <- inputIndex if !inIndex.contains(i._2)) yield i._1
-//      printf(p"length of inRemains = ${inRemains.length}\n")
       (for (i <- outs.toSeq) yield (i, a)) ++ inRemains
     } else {
       val inRemains = genCompressor(b, b, input, topology)
-//      printf(p"length of inRemains = ${inRemains.length}\n")
       genCompressor(a, b - 1, inRemains, topology)
     }
   }
@@ -65,7 +65,6 @@ class Compressor extends Topology {
 
 object Compressor {
   def apply(in: Seq[Value]): CompressorOutput = {
-//    println(s"length = ${in.length}\n")
     require(in.length == 3 || in.length == 4)
     if (in.length == 3) Compressor32(in)
     else Compressor42(in)
@@ -76,11 +75,11 @@ object Compressor {
     var outputs: Seq[(Value, Int)] = in
     for (i <- 0 until compressorLayer.layerNum) {
       outputs = compressorLayer.genLayer(i, outputs)
-//      printf(p"lengeh of outs = ${outputs.length}\n")
     }
     outputs
   }
 
+  // Pipeline
   def apply(down: Vec[Bool], in: Seq[(Value, Int)]): Seq[(Value, Int)] = {
     val compressorLayer = new Compressor
     var outputs: Seq[(Value, Int)] = in
