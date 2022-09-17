@@ -14,19 +14,19 @@ $$B = B_{n-1}  \times (-2)^{n-1} + B_{n-2}  \times 2^{n-2} + \cdots + B_{1}\time
 那么将偶数位拆开得到：
 
 $$
-\begin{align}
+\begin{aligned}
 B =&  B_{n-1}  \times (-2)^{n-1} + B_{n-2}  \times 2^{n-2} + \cdots + B_{1}\times 2^{1}+B_{0}\times2^{0} + B_{-1} \\
 =& (-2B_{n-1}+B_{n-2}+B_{n-3})\times 2^{n-2} + \\
 & (-2B_{n-3} +B_{n-4}+B_{n-5})\times 2^{n-4} + \\
 & \cdots + \\
 & (-2B_{1}+B_{0}+B_{-1})\times 2^{0} \\
-\end{align}
+\end{aligned}
 $$
 
 对于任意的数 $A$ ，其与 $B$ 相乘可以变为：
 
 $$
-\begin{align}
+\begin{aligned}
 A\times B =& A\times(-2B_{n-1}+B_{n-2}+B_{n-3})\times 2^{n-2} + \\
 & A\times(-2B_{n-3} +B_{n-4}+B_{n-5})\times 2^{n-4} + \\
 & \cdots + \\
@@ -35,7 +35,7 @@ A\times B =& A\times(-2B_{n-1}+B_{n-2}+B_{n-3})\times 2^{n-2} + \\
 & \{A\times(-2B_{n-3} +B_{n-4}+B_{n-5})\} << (n-4) + \\
 & \cdots + \\
 & \{A\times(-2B_{1}+B_{0}+B_{-1})\} << 0 \\ 
-\end{align}
+\end{aligned}
 $$
 
 将 $PP_{k} = A\times(-2B_{i+1}+B_{i}+B_{i-1})$ 称为部分积，其中 $k = \dfrac{{i}}{2}$ 。
@@ -72,7 +72,8 @@ $$
 因此乘数即可以扩充为 $110110|\_{2}0$ ，并产生3个编码 $(1,0,0)$ 、 $(0,1,1)$ 、 $(1,1,0)$ ；
 得到部分积为 $-2A$ 、 $2A$ 、 $-A$ 。所得结果为 $0000110010_{2}=50$ 。
 
-![](./attachments/plus-overview.png)
+<!-- ![](./attachments/plus-overview.png) -->
+<img src="./attachments/plus-overview.png" width=50% align=center />
 
 然而可以发现，如第一个部分积 $PP_{0}$ 占据10位，其中 $-2A$ 仅需6位数，然而为与其它部分积相加，需要进行位数扩充，
 在 $-2A$ 前方添加符号位。下图提供了化简的方式：
@@ -89,8 +90,10 @@ $$
 部分积的相加使用两种压缩器，分别为3-2压缩器与4-2压缩器。
 #### 3-2压缩器
 3-2压缩器即全加器，只不过不计算s与ca的和，而是将s与ca均视为输出，ca比s高一位。
+<img src="./attachments/c32.png" width=40% align=center />
 #### 4-2压缩器
 4-2压缩器为5-3压缩器的变形，通过级联`cin`和`cout`端口，可以实现由5-3压缩器到4-2压缩器的实现，同时由于实际结构，并不会因为级联而影响速度。
+<img src="./attachments/c42.png" width=60% align=center />
 ## Chisel实现
 本项目参考玄铁C910上的乘法器结构，通过加入参数化，实现可以随开发者需要生成不同位数、结构的乘法器。
 ### 基本数据类型
@@ -98,7 +101,6 @@ $$
 为实现不同位数和不同结构（主要是压缩树）的乘法器，项目采用带有偏移量的数据类型`Value`。采用偏移量可以尽最大程度减少压缩时压缩器需要的位宽。
 
 ```scala
-//import chisel3._
 class Value(val w: Int) extends Bundle {  
   val value: UInt = UInt(w.W) 
   var offset: Int = 0  
@@ -184,29 +186,26 @@ Booth编码模块的输出需要转换称`Value`类型，送入压缩树中进�
 
 实现一个固定位数的4-2压缩器。
 ```scala
-class Compressor42(val w: Int) extends Module {  
-  val io = IO(new Bundle() {  
-    val p0: UInt = Input(UInt(w.W))  
-    val p1: UInt = Input(UInt(w.W))  
-    val p2: UInt = Input(UInt(w.W))  
-    val p3: UInt = Input(UInt(w.W))  
-    val s: UInt = Output(UInt(w.W))  
-    val ca: UInt = Output(UInt(w.W))  
-  })  
-  val xor0: UInt = Wire(UInt(w.W))  
-  val xor1: UInt = Wire(UInt(w.W))  
-  val xor2: UInt = Wire(UInt(w.W))  
-  val cout: UInt= Wire(UInt(w.W))  
-  val cin: UInt = Wire(UInt(w.W))  
-  
-  cin := Cat(cout(w - 2, 0), 0.U(1.W))  
-  xor0 := io.p0 ^ io.p1  
-  xor1 := io.p2 ^ io.p3  
-  xor2 := xor1 ^ xor0  
-  
-  cout := xor0 & io.p2 | ((~xor0).asUInt & io.p0)  
-  io.s := xor2 ^ cin  
-  io.ca := xor2 & cin | ((~xor2).asUInt & io.p3)  
+class Compressor42(val w: Int) extends Module {
+  val io = IO(new Bundle() {
+    val p: Vec[UInt] = Input(Vec(4, UInt(w.W)))
+    val s: UInt = Output(UInt(w.W))
+    val ca: UInt = Output(UInt(w.W))
+  })
+  val xor0: UInt = Wire(UInt(w.W))
+  val xor1: UInt = Wire(UInt(w.W))
+  val xor2: UInt = Wire(UInt(w.W))
+  val cout: UInt= Wire(UInt(w.W))
+  val cin: UInt = Wire(UInt(w.W))
+
+  cin := Cat(cout(w - 2, 0), 0.U(1.W))
+  xor0 := io.p(0) ^ io.p(1)
+  xor1 := io.p(2) ^ io.p(3)
+  xor2 := xor1 ^ xor0
+
+  cout := xor0 & io.p(2) | ((~xor0).asUInt & io.p(0))
+  io.s := xor2 ^ cin
+  io.ca := xor2 & cin | ((~xor2).asUInt & io.p(3))
 }
 ```
 
@@ -218,19 +217,22 @@ class Compressor42(val w: Int) extends Module {
 ```scala
 object Compressor42 {  
   def apply(p: Seq[Value]): CompressorOutput = {  
-    require(p.length == 4)  
-    val offsets: Seq[Int] = for (l <- p) yield l.offset  
-    val offsetMin: Int = offsets.min  
-    val width: Seq[Int] = for (w <- p) yield w.value.getWidth  
-    val length: Seq[Int] = for (l <- offsets.zip(width)) yield l._1 + l._2  
-    val lengthSorted: Seq[Int] = length.sorted  
-    val widthMax: Int = 
-    if (lengthSorted(3) > lengthSorted(0) && 
-	    lengthSorted(3) > lengthSorted(1)) {  
-      lengthSorted(3) - offsetMin  
-    } else {  
-      lengthSorted(3) - offsetMin + 1  
-    }  
+    require(p.length == 4)
+    // Calculate the minimum offset
+    val offsets: Seq[Int] = for (l <- p) yield l.offset
+    val offsetMin: Int = offsets.min
+    // Get the used width of every value
+    val width: Seq[Int] = for (w <- p) yield w.value.getWidth
+    // Calculate the actual length of every value
+    val length: Seq[Int] = for (l <- offsets.zip(width)) yield l._1 + l._2
+    // Calculate the width need to be used
+    val lengthSorted: Seq[Int] = length.sorted
+    val widthMax: Int = if (lengthSorted(3) > lengthSorted(0) 
+							&& lengthSorted(3) > lengthSorted(1)) {
+      lengthSorted(3) - offsetMin
+    } else {
+      lengthSorted(3) - offsetMin + 1
+    } 
     // Sort p by length    
     val pSorted: Seq[(Value, Int)] = p.zip(length).sortBy(p0 => p0._2) 
     // Instantiate Compressor42
@@ -241,6 +243,8 @@ object Compressor42 {
   }  
 }
 ```
+事实上，如果将压缩器的位宽设置为最大位宽，如2倍数据宽度，并不影响最后的结果，因为综合时，编译器会自动进行优化，将未用到的门电路删除。
+
 ### 生成压缩树
 #### 部分积连接矩阵
 
@@ -314,20 +318,25 @@ class Compressor extends Topology {
     // topology -> ((from where, connect type), to where)  
     // input -> (value, from where)    
     // return -> (value, from where)    require(a <= b)  
-    if (a == b) {  
-      // to Compressor a  
-      // t0 -> ((from where, connect type), to where)      
+    if (a == b) {
+      // Instantiate Compressor a
+      // t0 -> ((from where, connect type), to where)
+      // Find all the connections that output is Compressor a   
       val t0 = for (c <- topology if c._2 == a) yield c  
       val inputIndex: Seq[((Value, Int), Int)] = input.zipWithIndex  
-  
-      // index where inputs from   
+    
       var in: Seq[Value] = Seq()  
-      var inIndex: Seq[Int] = Seq()  
+      var inIndex: Seq[Int] = Seq()
+      // The inputs that do not be used
       var inRemains: Seq[(Value, Int)] = Seq()  
+
 	  // ***
 	  // Code
 	  // ***
-      val outs = Compressor(in)  
+	      
+      // Instantiate Compressor
+      val outs = Compressor(in)
+      // Output all the values that remained 
       inRemains = for(i <- inputIndex if !inIndex.contains(i._2)) yield i._1  
       (for (i <- outs.toSeq) yield (i, a)) ++ inRemains  
     } else {  
@@ -350,6 +359,7 @@ class Compressor extends Topology {
 流水线的加入相对比较简单，由于每个压缩层的输出均可以获得，只要将每个输出经过一次寄存器即可。
 
 ```scala
+// Pipeline
 def apply(down: Vec[Bool], in: Seq[(Value, Int)]): Seq[(Value, Int)] = {  
   val compressorLayer = new Compressor  
   var outputs: Seq[(Value, Int)] = in  
@@ -384,6 +394,7 @@ def apply(down: Vec[Bool], in: Seq[(Value, Int)]): Seq[(Value, Int)] = {
 
 ### 测试
 
+输入随机数进行测试。
 ```scala
 class MultiplierTest extends AnyFreeSpec with ChiselScalatestTester with BaseData {  
   "Calculate should pass" in {  
