@@ -66,7 +66,6 @@ object BoothCodeUnit{
     val boothCodeUnit = Module(new BoothCodeUnit(w))
     boothCodeUnit.io.A := A
     boothCodeUnit.io.code := code
-//    printf(p"boothcode out = ${boothCodeUnit.io.boothCodeOutput}\n")
     boothCodeUnit.io.boothCodeOutput
   }
   def apply(A: UInt, code: UInt): BoothCodeOutput = {
@@ -79,7 +78,6 @@ object BoothCodeUnit{
 object BoothCode{
   def apply(w: Int, A: UInt, code: UInt): Vec[BoothCodeOutput] = {
     val codewidth = code.getWidth
-//    require(codewidth % 2 == 0)
     if(codewidth == 2){
       VecInit(BoothCodeUnit(w, A, Cat(code, 0.U(1.W))))
     }else if(codewidth % 2 == 0){

@@ -44,7 +44,7 @@ object Compressor42 {
     }
     // Sort p by its actual length
     val pSorted: Seq[Value] = p.zip(length).sortBy(p0 => p0._2).map(x => x._1)
-    // Zeros to be fill
+    // Zeros to be filled
     val zeroFill: Seq[Int] = pSorted.map(x => x.offset - offsetMin)
     // Instantiate Compressor42
     val compressor42: Compressor42 = Module(new Compressor42(widthMax))

@@ -14,17 +14,18 @@ trait Topology extends BaseData {
   val inputArray: Seq[Int] = Seq(8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 14, 14, 15, 15, 16, 16, 17, 17, 18, 18, 19, 19)
   val sOrCaOutArray: Seq[Int] = Seq(3, 1, 2, 3, 3, 1, 2, 3, 3, 1, 2, 3, 3, 3, 3, 3, 3, 3, 1, 2, 3, 3, 3)
 
-  //  val connectLayer = for (c <- connectCompressor; i <- 0 until  layer.length - 1) {
-  //    if(c >= layer(i) && c <= layer(i + 1)) yield i
-  //    else
-  //  }
   require(outArray.length == inputArray.length && outArray.length == sOrCaOutArray.length)
 
   // ((from where, connect type), to where)
   val topologyArray: Seq[((Int, Int), Int)] = outArray.zip(sOrCaOutArray).zip(inputArray)
   val compressorNum: Int = inputArray.last + 1
+
+  // ((from where, connect type), to where)
+  // When data comes from PP, then its index = -1 - 1
+  // for example PP1: ((-2, 1) 0). It's from -2.
   var connectArray: Seq[((Int, Int), Int)] = for (c <- connectCompressor.zipWithIndex) yield ((-c._2 - 1, 1), c._1)
   connectArray ++= topologyArray
+
   val topologyAll: Seq[((Int, Int), Int)] = connectArray.sortBy(x => x._2)
 
   val layer: Seq[Seq[Int]] = Seq(
@@ -35,7 +36,6 @@ trait Topology extends BaseData {
   Seq(19))
 
   val pipeline: Seq[(Int, Int)] = Seq((1, 0), (4, 1))
-//  val pipeline: Seq[(Int, Int)] = Seq((1, 0))
   val isLastLayerPipe: Boolean = (pipeline.last._1 == layer.length - 1) && isPipeline
 
 }

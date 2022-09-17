@@ -36,7 +36,7 @@ object Compressor32 {
     val lengthMax: Int = length.max - offsetMin
     // Sort in by its actual length
     val inSorted: Seq[Value] = in.zip(length).sortBy(x => x._2).map(x => x._1)
-    // Zeros to be fill
+    // Zeros to be filled
     val zeroFill: Seq[Int] = inSorted.map(x => x.offset - offsetMin)
     // Instantiate Compressor32
     val compressor32: Compressor32 = Module(new Compressor32(lengthMax))
@@ -51,8 +51,6 @@ object Compressor32 {
     compressorOutput.ca.value := compressor32.io.ca
     compressorOutput.s.offset = offsetMin
     compressorOutput.ca.offset = offsetMin + 1
-//    printf(p"offset32s = ${compressorOutput.s.offset}\n")
-//    printf(p"offset32ca = ${compressorOutput.ca.offset}\n")
     compressorOutput
   }
 }
