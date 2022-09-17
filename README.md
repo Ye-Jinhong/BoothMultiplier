@@ -90,10 +90,14 @@ $$
 部分积的相加使用两种压缩器，分别为3-2压缩器与4-2压缩器。
 #### 3-2压缩器
 3-2压缩器即全加器，只不过不计算s与ca的和，而是将s与ca均视为输出，ca比s高一位。
-<img src="./attachments/c32.png" width=40% align=center />
+
+<img src="./attachments/c32.png" width=40% />
+
 #### 4-2压缩器
 4-2压缩器为5-3压缩器的变形，通过级联`cin`和`cout`端口，可以实现由5-3压缩器到4-2压缩器的实现，同时由于实际结构，并不会因为级联而影响速度。
-<img src="./attachments/c42.png" width=60% align=center />
+
+<img src="./attachments/c42.png" width=60% />
+
 ## Chisel实现
 本项目参考玄铁C910上的乘法器结构，通过加入参数化，实现可以随开发者需要生成不同位数、结构的乘法器。
 ### 基本数据类型
