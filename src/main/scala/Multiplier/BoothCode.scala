@@ -79,10 +79,15 @@ object BoothCode{
   def apply(w: Int, A: UInt, code: UInt): Vec[BoothCodeOutput] = {
     val codewidth = code.getWidth
     if(codewidth == 2){
+      // The last one Booth Code
       VecInit(BoothCodeUnit(w, A, Cat(code, 0.U(1.W))))
     }else if(codewidth % 2 == 0){
+      // If the whole code is even
+      // There is nothing to do
       VecInit(apply(w, A, code(codewidth - 3, 0)) :+ BoothCodeUnit(w, A, code(codewidth - 1, codewidth - 3)))
     }else{
+      // If the whole code is odd
+      // It should be expanded by MSB
       VecInit(apply(w, A, code(codewidth - 2, 0)) :+ BoothCodeUnit(w, A, Cat(code(codewidth - 1), code(codewidth - 1, codewidth - 2))))
     }
   }

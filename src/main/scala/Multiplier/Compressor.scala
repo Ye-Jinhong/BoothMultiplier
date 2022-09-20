@@ -7,16 +7,22 @@ import chisel3.util._
 class Compressor extends Topology {
   val layerNum: Int = layer.length
 
+  // Generate the compressor in layer l
   def genLayer(l: Int, input: Seq[(Value, Int)]): Seq[(Value, Int)] = {
+    // l -> layer index
     // topology -> ((from where, connect type), to where)
     // input -> (value, from where)
+    // return -> (value, from where)
     val compressorIndex: Seq[Int] = layer(l)
     // Find all the connections that output is in layer l
     val t: Seq[((Int, Int), Int)] = topologyAll.filter(t => compressorIndex.contains(t._2))
+    // Call genCompressor(...)
     genCompressor(compressorIndex.head, compressorIndex.last, input, t)
   }
 
+  // Generate the compressor from a to b
   def genCompressor(a: Int, b: Int, input: Seq[(Value, Int)], topology: Seq[((Int, Int), Int)]): Seq[(Value, Int)] = {
+    // a, b -> compressor index
     // input -> (value, from where)
     // topology -> ((from where, connect type), to where)
     // return -> (value, from where)
@@ -81,16 +87,24 @@ object Compressor {
 
   // Pipeline
   def apply(down: Vec[Bool], in: Seq[(Value, Int)]): Seq[(Value, Int)] = {
+    // down -> pipeline valid signal
+    // in -> (value, from where)
+    // return -> (value, from where)
     val compressorLayer = new Compressor
     var outputs: Seq[(Value, Int)] = in
     for (i <- 0 until compressorLayer.layerNum) {
       val pipeLayer = for (k <- compressorLayer.pipeline if k._1 == i) yield k._2
       if (pipeLayer.isEmpty) {
+        // This layer is no pipeline
         outputs = compressorLayer.genLayer(i, outputs)
       } else {
+        // This layer is pipeline
         val layerDown: Bool = down(pipeLayer.head)
+        // Outputs that to pass registers
         val outputsWire = compressorLayer.genLayer(i, outputs)
+        // Outputs that have passed registers
         var outputsReg: Seq[(Value, Int)] = Seq()
+        // For every outputs
         for (c <- outputsWire) {
           val regC = RegInit(0.U(c._1.value.getWidth.W))
           val v = Wire(new Value(c._1.value.getWidth))

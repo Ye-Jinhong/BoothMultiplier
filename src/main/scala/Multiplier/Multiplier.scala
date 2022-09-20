@@ -5,7 +5,7 @@ import chisel3.util._
 
 
 class Multiplier extends Module with BaseData with Topology {
-  require(connectCompressor.length == n + 2)
+  require(ppToCompressor.length == n + 2)
   val io = IO(new Bundle {
     val down: Vec[Bool] = if (isPipeline) Input(Vec(pipeline.length, Bool())) else null
     val multiplicand: SInt = Input(SInt(w.W))
