@@ -27,16 +27,14 @@ class MultiplierTest extends AnyFreeSpec with ChiselScalatestTester with BaseDat
       c.io.sub_vld.poke(sub.B)
       c.io.addend.poke(addend.asSInt((w-1).W))
       if (c.isPipeline) {
-//        c.io.cpurst_b.poke(false.B)
-        c.clock.step(1)
-//        c.io.cpurst_b.poke(true.B)
-        c.io.down(0).poke(true.B)
-        c.clock.step(1)
-        c.io.down(1).poke(true.B)
+        for(i <- c.pipeline.indices){
+          c.clock.step(1)
+          c.io.down(i).poke(true.B)
+        }
         c.clock.step(1)
       }
-      c.clock.step(1)
       c.io.product.expect(product.asSInt((2*w).W))
+      c.clock.step(1)
     }
   }
   (new ChiselStage).emitVerilog(new Multiplier(), Array("-td", "generated", "--full-stacktrace"))

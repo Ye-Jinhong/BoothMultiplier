@@ -32,8 +32,6 @@ trait Customize extends BaseData{
 }
 
 trait Topology extends Customize {
-
-
   // ((from where, connect type), to where)
   val topologyArray: Seq[((Int, Int), Int)] = outArray.zip(sOrCaOutArray).zip(inputArray)
   val compressorNum: Int = inputArray.last + 1
@@ -52,29 +50,34 @@ trait Topology extends Customize {
   val pipeline: Seq[(Int, Int)] = Seq((1, 0), (4, 1))
   val isLastLayerPipe: Boolean = (pipeline.last._1 == layer.length - 1) && isPipeline
 
-//  private def genTopologyArray (autoGen: Boolean): Seq[((Int, Int), Int)] = {
-//    if (!autoGen)
-//      outArray.zip(sOrCaOutArray).zip(inputArray)
-//    else {
-//      val (layers: Seq[Seq[Int]], choseCompressor: Seq[Int], remains: Seq[Int]) = genLayers()
-//      val layerNum = layers.length
-////      require(layerNum >= (log2Ceil(ppNum) - 1), "Layer number is too SMALL")
-////      require(layerNum <= (math.ceil(math.log(ppNum) / math.log(1.5)) - 1), "Layer number is too LARGE")
-//      val connectCompressorAuto = Seq()
-//      for (i <- 0 until layerNum) {
-//        if (i == 0) {
-//          var index = -1
-//          var count = 1
-//          val r = genLayers._3.head
-//          for (j <- 0 until ppNum) {
-//
-//          }
-//        }
-//      }
-//    }
-//  }
+  private def genTopology (autoGen: Boolean): Seq[((Int, Int), Int)] = {
+    if (!autoGen) {
+      val topologyArray: Seq[((Int, Int), Int)] = outArray.zip(sOrCaOutArray).zip(inputArray)
+      val connectArray: Seq[((Int, Int), Int)] = for (c <- ppToCompressor.zipWithIndex) yield ((-c._2 - 1, 1), c._1)
+      connectArray ++ topologyArray
+    } else {
+      val (layers: Seq[Seq[Int]], choseCompressor: Seq[Int], remains: Seq[Int], noConnected: Seq[Int]) = genLayers()
+      val layerNum = layers.length
+      val connectCompressorAuto = Seq()
+      for (i <- 0 until layerNum) {
+        val layerIndex = layerNum - i - 1
+        if(layerIndex == 0){
 
-  private def genLayers(): (Seq[Seq[Int]], Seq[Int], Seq[Int]) = {
+        } else {
+          val layerDown = layers(i)
+          val layerUp = layers(i - 1)
+          val cNumDown = layerDown.length
+          val cNumUp = layerUp.length
+          val noConnect = noConnected(i - 1)
+          for (j <- layerUp.indices){
+
+          }
+        }
+      }
+    }
+  }
+
+  private def genLayers(): (Seq[Seq[Int]], Seq[Int], Seq[Int], Seq[Int]) = {
     val remains: Seq[Int] = Seq()
     remains ++ Seq(ppNum)
     val choseCompressor: Seq[Int] = Seq()
@@ -83,7 +86,7 @@ trait Topology extends Customize {
     var i = 0
     while(remains(i) > 2) {
       val r = remains(i)
-      val c = choseCompressor(r)
+      val c = chooseCompressor(r)
       val cNum = r / c
       choseCompressor ++ Seq(c)
       compressorNum ++ Seq(cNum)
@@ -102,7 +105,7 @@ trait Topology extends Customize {
       }
       layer ++ Seq(l)
     }
-    (layer, choseCompressor, remains)
+    (layer, choseCompressor, remains, noConnected)
   }
 
 
