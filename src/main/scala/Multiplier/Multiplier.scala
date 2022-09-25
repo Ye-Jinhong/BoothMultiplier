@@ -40,7 +40,7 @@ class Multiplier extends Module with BaseData with Topology {
   // total n + 2 partial products
   val partProducts: Seq[Value] = BCOutput2PProduct.toPProduct(w, boothCodeOutput, partProductLast)
   // Input to Compressor tree
-  var inputFromPP: Seq[(Value, Int)] = for (pp <- partProducts.zipWithIndex) yield (pp._1, -pp._2 - 1)
+  var inputFromPP: Seq[(Value, Int)] = for (pp <- partProducts.zipWithIndex) yield (pp._1, pp._2 - ppNum)
 
   val compressorOutLast: Seq[Value] =
     if (!isPipeline)

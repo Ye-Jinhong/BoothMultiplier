@@ -39,7 +39,7 @@ trait Topology extends Customize {
   // ((from where, connect type), to where)
   // When data comes from PP, then its index = -1 - 1
   // for example PP1: ((-2, 1) 0). It's from -2.
-  var connectArray: Seq[((Int, Int), Int)] = for (c <- ppToCompressor.zipWithIndex) yield ((-c._2 - 1, 1), c._1)
+  var connectArray: Seq[((Int, Int), Int)] = for (c <- ppToCompressor.zipWithIndex) yield ((c._2 - ppNum, 1), c._1)
   connectArray ++= topologyArray
 
   val topologyAll: Seq[((Int, Int), Int)] = connectArray.sortBy(x => x._2)
@@ -59,6 +59,13 @@ trait Topology extends Customize {
       val (layers: Seq[Seq[Int]], choseCompressor: Seq[Int], remains: Seq[Int], noConnected: Seq[Int]) = genLayers()
       val layerNum = layers.length
       val connectCompressorAuto = Seq()
+      // (from where, to where, connect type, is connected)
+      var connectedWire: Seq[(Int, Int, Int, Boolean)] = Seq()
+      var noConnectedWire: Seq[(Int, Int, Int, Boolean)] = Seq()
+      val pp2c0 = for (i <- 0 until ppNum - 1) yield (i - ppNum, 0, 1, false)
+      pp2c0 ++ Seq((-1, 0, 1, false))
+      noConnectedWire = pp2c0.sortBy(i => (i._4, i._1, i._3))
+
       for (i <- 0 until layerNum) {
         val layerIndex = layerNum - i - 1
         if(layerIndex == 0){
@@ -77,6 +84,33 @@ trait Topology extends Customize {
     }
   }
 
+  private def genConnection(noConnectedWire: Seq[(Int, Int, Int, Boolean)],
+                            connectedWire: Seq[(Int, Int, Int, Boolean)],
+                            cType: Int, compressors: Seq[Int]): Seq[(Int, Int, Int, Boolean)] = {
+    var noConnectedLine = noConnectedWire.sortBy(i => (i._4, i._1, i._3))
+    var connectedLine = connectedWire
+    var counter = 0
+    for (i <- compressors) {
+    }
+  }
+
+//  private def genPPToCompressor(cType: Int, noConnect: Int): Seq[((Int, Int), Int)] ={
+//    if(!autoGenArray)
+//      connectArray
+//    else{
+//      val pp2c0 = for (i <- 0 until ppNum - 1) yield (-i - 1, i + 1)
+//      pp2c0 ++ Seq((ppNum - 1, 0))
+//      val pp2c1 = pp2c0.sortBy(i => i._2)
+//      var c = 0
+//      for (i <- pp2c1.indices) {
+//        if (i <= ppNum - 1 - noConnect) {
+//
+//        } else {
+//
+//        }
+//      }
+//    }
+//  }
   private def genLayers(): (Seq[Seq[Int]], Seq[Int], Seq[Int], Seq[Int]) = {
     val remains: Seq[Int] = Seq()
     remains ++ Seq(ppNum)
