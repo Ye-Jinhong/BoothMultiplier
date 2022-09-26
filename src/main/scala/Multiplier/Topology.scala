@@ -8,14 +8,15 @@ trait BaseData {
   val isPipeline: Boolean = true
   val n: Int = if (odd) (w + 1) / 2 else w / 2
   val ppNum: Int = n + 2
-  // If you use the auto generation function for topology
-  // The following variables should be correct
-  // Otherwise they do not matter
-  val autoGenArray: Boolean = false
-//  val layerNum: Int = 5
+  // If you want to use Auto Generation
+  // Please use `ture` to replace `false`
+  val autoGenArray: Boolean = true
 }
 
 trait Customize extends BaseData{
+  // If you do not use the auto generation function for topology
+  // The following variables should be correct
+  // Otherwise they do not matter
   val ppToCompressor: Seq[Int] = Seq(0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 13, 13, 13, 0)
   val outArray: Seq[Int] = Seq(0, 1, 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 10, 11, 12, 13, 14, 15, 15, 16, 17, 18)
   val inputArray: Seq[Int] = Seq(8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 14, 14, 15, 15, 16, 16, 17, 17, 18, 18, 19, 19)
@@ -29,117 +30,112 @@ trait Customize extends BaseData{
     Seq(14, 15, 16),
     Seq(17, 18),
     Seq(19))
+
+  val cTypesCustom: Seq[Int] = Seq(4, 3, 3, 3, 4)
 }
 
 trait Topology extends Customize {
-  // ((from where, connect type), to where)
-  val topologyArray: Seq[((Int, Int), Int)] = outArray.zip(sOrCaOutArray).zip(inputArray)
-  val compressorNum: Int = inputArray.last + 1
 
-  // ((from where, connect type), to where)
-  // When data comes from PP, then its index = -1 - 1
-  // for example PP1: ((-2, 1) 0). It's from -2.
-  var connectArray: Seq[((Int, Int), Int)] = for (c <- ppToCompressor.zipWithIndex) yield ((c._2 - ppNum, 1), c._1)
-  connectArray ++= topologyArray
+  val layerOut: (Seq[Seq[Int]], Seq[Int]) = genLayers(cTypesCustom)
+  val layer: Seq[Seq[Int]] = layerOut._1
+  val cTypes: Seq[Int] = layerOut._2
+  println(cTypes)
 
-  val topologyAll: Seq[((Int, Int), Int)] = connectArray.sortBy(x => x._2)
-
-
-  val layer: Seq[Seq[Int]] = if (autoGenArray) genLayers()._1 else layerCustom
+  val topologyAll: Seq[((Int, Int), Int)] = genTopology()
 
   val pipeline: Seq[(Int, Int)] = Seq((1, 0), (4, 1))
   val isLastLayerPipe: Boolean = (pipeline.last._1 == layer.length - 1) && isPipeline
 
-  private def genTopology (autoGen: Boolean): Seq[((Int, Int), Int)] = {
-    if (!autoGen) {
+  private def genTopology (): Seq[((Int, Int), Int)] = {
+    if (!autoGenArray) {
+      // ((from where, connect type), to where)
       val topologyArray: Seq[((Int, Int), Int)] = outArray.zip(sOrCaOutArray).zip(inputArray)
-      val connectArray: Seq[((Int, Int), Int)] = for (c <- ppToCompressor.zipWithIndex) yield ((-c._2 - 1, 1), c._1)
-      connectArray ++ topologyArray
+      var connectArray: Seq[((Int, Int), Int)] = for (c <- ppToCompressor.zipWithIndex) yield ((c._2 - ppNum, 1), c._1)
+      connectArray ++= topologyArray
+      connectArray
     } else {
-      val (layers: Seq[Seq[Int]], choseCompressor: Seq[Int], remains: Seq[Int], noConnected: Seq[Int]) = genLayers()
-      val layerNum = layers.length
-      val connectCompressorAuto = Seq()
-      // (from where, to where, connect type, is connected)
-      var connectedWire: Seq[(Int, Int, Int, Boolean)] = Seq()
-      var noConnectedWire: Seq[(Int, Int, Int, Boolean)] = Seq()
-      val pp2c0 = for (i <- 0 until ppNum - 1) yield (i - ppNum, 0, 1, false)
-      pp2c0 ++ Seq((-1, 0, 1, false))
-      noConnectedWire = pp2c0.sortBy(i => (i._4, i._1, i._3))
+      // (from where, from layer, to where, connect type, is connected)
+      var noConnectedWire: Seq[(Int, Int, Int, Int, Boolean)] = Seq()
+      var pp2C = for (i <- 0 until ppNum - 1) yield (i - ppNum, -2, 0, 1, false)
+      pp2C ++= Seq((-1, -1, 0, 1, false))
+      noConnectedWire = pp2C.sortBy(i => (i._2, i._5, i._1, i._4))
 
-      for (i <- 0 until layerNum) {
-        val layerIndex = layerNum - i - 1
-        if(layerIndex == 0){
+      val topology = genConnection(noConnectedWire, 0)
+      for (i <- topology) yield ((i._1, i._3), i._2)
+    }
+  }
 
-        } else {
-          val layerDown = layers(i)
-          val layerUp = layers(i - 1)
-          val cNumDown = layerDown.length
-          val cNumUp = layerUp.length
-          val noConnect = noConnected(i - 1)
-          for (j <- layerUp.indices){
-
-          }
+  private def genConnection(noConnectedWire: Seq[(Int, Int, Int, Int, Boolean)], nowLayer: Int): Seq[(Int, Int, Int)] = {
+    // (from where, from layer, to where, connect type, is connected)
+    var noConnectedLine = noConnectedWire.sortBy(i => (-i._2, i._5, i._1, i._4))
+    var connectedLine: Seq[(Int, Int, Int)] = Seq()
+    var noConnectedLineOut: Seq[(Int, Int, Int, Int, Boolean)] = Seq()
+    val cType = cTypes(nowLayer)
+    var counter = 0
+    var c = 0
+    val cNum = layer(nowLayer).last - layer(nowLayer).head
+    for (i <- noConnectedLine.indices) {
+      if (c <= cNum) {
+        val line = noConnectedLine(i)
+        // (from where, from layer, to where, connect type, is connected)
+        val updateLine = (line._1, line._2, layer(nowLayer)(c), line._4, true)
+        noConnectedLine = noConnectedLine.updated(i, updateLine)
+        connectedLine ++= Seq((updateLine._1, updateLine._3, updateLine._4))
+        counter = counter + 1
+        if (counter % cType == 0) {
+          val out1 = (layer(nowLayer)(c), nowLayer, 0, 1, false)
+          val out2 = (layer(nowLayer)(c), nowLayer, 0, 2, false)
+          noConnectedLineOut ++= Seq(out1, out2)
+          c = c + 1
+          counter = 0
         }
       }
     }
-  }
 
-  private def genConnection(noConnectedWire: Seq[(Int, Int, Int, Boolean)],
-                            connectedWire: Seq[(Int, Int, Int, Boolean)],
-                            cType: Int, compressors: Seq[Int]): Seq[(Int, Int, Int, Boolean)] = {
-    var noConnectedLine = noConnectedWire.sortBy(i => (i._4, i._1, i._3))
-    var connectedLine = connectedWire
-    var counter = 0
-    for (i <- compressors) {
+    val noConnect0 = noConnectedLine.filter(c => !c._5)
+    noConnectedLineOut ++= noConnect0
+
+    if (nowLayer < layer.length - 1) {
+      connectedLine ++= genConnection(noConnectedLineOut, nowLayer + 1)
+      connectedLine
+    } else {
+      connectedLine
     }
   }
 
-//  private def genPPToCompressor(cType: Int, noConnect: Int): Seq[((Int, Int), Int)] ={
-//    if(!autoGenArray)
-//      connectArray
-//    else{
-//      val pp2c0 = for (i <- 0 until ppNum - 1) yield (-i - 1, i + 1)
-//      pp2c0 ++ Seq((ppNum - 1, 0))
-//      val pp2c1 = pp2c0.sortBy(i => i._2)
-//      var c = 0
-//      for (i <- pp2c1.indices) {
-//        if (i <= ppNum - 1 - noConnect) {
-//
-//        } else {
-//
-//        }
-//      }
-//    }
-//  }
-  private def genLayers(): (Seq[Seq[Int]], Seq[Int], Seq[Int], Seq[Int]) = {
-    val remains: Seq[Int] = Seq()
-    remains ++ Seq(ppNum)
-    val choseCompressor: Seq[Int] = Seq()
-    val compressorNum: Seq[Int] = Seq()
-    val noConnected: Seq[Int] = Seq()
-    var i = 0
-    while(remains(i) > 2) {
-      val r = remains(i)
-      val c = chooseCompressor(r)
-      val cNum = r / c
-      choseCompressor ++ Seq(c)
-      compressorNum ++ Seq(cNum)
-      remains ++ Seq(cNum * 2 + (r % c))
-      noConnected ++ Seq(r % c)
-      i = i + 1
-    }
-    require(remains.last == 2)
-    val layer: Seq[Seq[Int]] = Seq()
-    var index = 0
-    for (i <- compressorNum) {
-      val l: Seq[Int] = Seq()
-      for (j <- 0 until i) {
-        l ++ Seq(index)
-        index = index + 1
+
+  private def genLayers(cTypes: Seq[Int]): (Seq[Seq[Int]], Seq[Int]) = {
+    if (!autoGenArray) {
+      (layerCustom, cTypesCustom)
+    } else {
+      val givenCNum = cTypes.length
+      var remains: Seq[Int] = Seq()
+      remains ++= Seq(ppNum)
+      var choseCompressor: Seq[Int] = Seq()
+      var compressorNum: Seq[Int] = Seq()
+      var i = 0
+      while (remains(i) > 2) {
+        val r = remains(i)
+        val c = if (i < givenCNum && cTypes(i) <= r) cTypes(i) else chooseCompressor(r)
+        val cNum = r / c
+        choseCompressor ++= Seq(c)
+        compressorNum ++= Seq(cNum)
+        remains ++= Seq(cNum * 2 + (r % c))
+        i = i + 1
       }
-      layer ++ Seq(l)
+      require(remains.last == 2)
+      var layer: Seq[Seq[Int]] = Seq()
+      var index = 0
+      for (i <- compressorNum) {
+        var l: Seq[Int] = Seq()
+        for (j <- 0 until i) {
+          l ++= Seq(index)
+          index = index + 1
+        }
+        layer ++= Seq(l)
+      }
+      (layer, choseCompressor)
     }
-    (layer, choseCompressor, remains, noConnected)
   }
 
 
