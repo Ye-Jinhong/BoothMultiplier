@@ -37,5 +37,5 @@ class MultiplierTest extends AnyFreeSpec with ChiselScalatestTester with BaseDat
       c.clock.step(1)
     }
   }
-  (new ChiselStage).emitVerilog(new Multiplier(), Array("-td", "generated", "--full-stacktrace"))
+  (new ChiselStage).emitVerilog(Multiplier(), Array("-td", "generated", "--full-stacktrace"))
 }
