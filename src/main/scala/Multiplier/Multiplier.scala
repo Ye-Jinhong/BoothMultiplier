@@ -4,7 +4,7 @@ import chisel3._
 import chisel3.util._
 
 
-class Multiplier extends Module with BaseData with Topology {
+class Multiplier extends Module with Topology {
   require(ppToCompressor.length == n + 2)
   val io = IO(new Bundle {
     val down: Vec[Bool] = if (isPipeline) Input(Vec(pipeline.length, Bool())) else null
@@ -74,4 +74,13 @@ class Multiplier extends Module with BaseData with Topology {
   io.product := Cat(productMult(2*w-1,w-1),productMultAdd(w-2,0)).asSInt
 
   printf(p"io.product = ${io.product}\n")
+}
+
+object Multiplier {
+  def apply(): Multiplier = new Multiplier()
+//  def apply(w: Int): Multiplier = {
+//    val m = new Multiplier()
+//    m.w = w
+//    m
+//  }
 }
