@@ -10,6 +10,7 @@ import scala.util.Random
 class MultiplierTest extends AnyFreeSpec with ChiselScalatestTester with BaseData {
   "Calculate should pass" in {
     val sub: Boolean = (Random.nextInt % 2 == 1)
+//    val sub = true
     println(s"sub = ${sub}")
     val multiplier: Long = Random.nextInt
 //    val multiplier = -1
@@ -33,8 +34,8 @@ class MultiplierTest extends AnyFreeSpec with ChiselScalatestTester with BaseDat
         }
         c.clock.step(1)
       }
-      c.io.product.expect(product.asSInt((2*w).W))
       c.clock.step(1)
+      c.io.product.expect(product.asSInt((2*w).W))
     }
   }
   (new ChiselStage).emitVerilog(Multiplier(), Array("-td", "generated", "--full-stacktrace"))

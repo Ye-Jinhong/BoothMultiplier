@@ -5,6 +5,7 @@ import chisel3._
 class Value(val w: Int) extends Bundle {
   val value: UInt = UInt(w.W)
   var offset: Int = 0
+  override def toString: String = s"[value = ${value}, offset = $offset]"
 }
 
 object Value {

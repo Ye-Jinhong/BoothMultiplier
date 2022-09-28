@@ -156,12 +156,13 @@ trait Topology extends Customize {
 //  val w = 8
 //  val odd: Boolean = w % 2 == 1
 //  val n: Int = if (odd) (w + 1) / 2 else w / 2
-//
+//  val ppNum: Int = n + 2
+//  val isPipeline = false
 //}
-
+//
 //trait Topology extends BaseData {
-//  val connectCompressor: Seq[Int] = Seq(0, 0, 1, 1, 1, 0)
-//  val connectCompressorSorted: Seq[(Int, Int)] = connectCompressor.zipWithIndex.sortBy(c => c._2)
+//  val ppToCompressor: Seq[Int] = Seq(0, 0, 1, 1, 1, 0)
+//  val connectCompressorSorted: Seq[(Int, Int)] = ppToCompressor.zipWithIndex.sortBy(c => c._2)
 //  val outArray: Seq[Int] = Seq(0, 1)
 //  val inputArray: Seq[Int] = Seq(2, 2)
 //  val sOrCaOutArray: Seq[Int] = Seq(3, 3)
@@ -175,11 +176,14 @@ trait Topology extends Customize {
 //  // ((from where, connect type), to where)
 //  val topologyArray: Seq[((Int, Int), Int)] = outArray.zip(sOrCaOutArray).zip(inputArray)
 //  val compressorNum: Int = inputArray.last + 1
-//  var connectArray: Seq[((Int, Int), Int)] = for (c <- connectCompressor.zipWithIndex) yield ((-c._2 - 1, 1), c._1)
+//  var connectArray: Seq[((Int, Int), Int)] = for (c <- ppToCompressor.zipWithIndex) yield ((-c._2 - 1, 1), c._1)
 //  connectArray ++= topologyArray
 //  val topologyAll = connectArray.sortBy(x => x._2)
 //
 //  val layer: Seq[Seq[Int]] = Seq(
 //    Seq(0, 1),
 //    Seq(2))
+//
+//  val pipeline: Seq[(Int, Int)] = Seq((1, 0), (4, 1))
+//  val isLastLayerPipe: Boolean = (pipeline.last._1 == layer.length - 1) && isPipeline
 //}
