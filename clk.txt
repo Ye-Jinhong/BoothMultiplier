@@ -1,0 +1,8 @@
+  clk_wiz_0 clk_wiz
+   (
+    // Clock out ports
+    .clk_out1(clock),     		// output clk_out1
+    // Clock in ports
+    .clk_in1_p(clk_in1_p),    	// input clk_in1_p
+    .clk_in1_n(clk_in1_n));    	// input clk_in1_n
+

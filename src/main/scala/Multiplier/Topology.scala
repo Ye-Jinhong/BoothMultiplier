@@ -31,7 +31,7 @@ trait Customize extends BaseData{
     Seq(17, 18),
     Seq(19))
 
-  val cTypesCustom: Seq[Int] = Seq(4, 3, 3, 3, 4)
+  val cTypesCustom: Seq[Int] = Seq( 4, 4, 4, 4, 4, 4)
 }
 
 trait Topology extends Customize {
@@ -39,7 +39,7 @@ trait Topology extends Customize {
   val layerOut: (Seq[Seq[Int]], Seq[Int]) = genLayers(cTypesCustom)
   val layer: Seq[Seq[Int]] = layerOut._1
   val cTypes: Seq[Int] = layerOut._2
-  println(cTypes)
+//  println(cTypes)
 
   val topologyAll: Seq[((Int, Int), Int)] = genTopology()
 

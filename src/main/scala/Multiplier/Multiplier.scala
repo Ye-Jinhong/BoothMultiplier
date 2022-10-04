@@ -73,7 +73,7 @@ class Multiplier extends Module with Topology {
 
   io.product := Cat(productMult(2*w-1,w-1),productMultAdd(w-2,0)).asSInt
 
-  printf(p"io.product = ${io.product}\n")
+//  printf(p"io.product = ${io.product}\n")
 }
 
 object Multiplier {
