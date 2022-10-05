@@ -5,7 +5,6 @@ import chisel3.util._
 
 
 class Multiplier extends Module with Topology {
-  require(ppToCompressor.length == n + 2)
   val io = IO(new Bundle {
     val down: Vec[Bool] = if (isPipeline) Input(Vec(pipeline.length, Bool())) else null
     val multiplicand: SInt = Input(SInt(w.W))
@@ -30,11 +29,11 @@ class Multiplier extends Module with Topology {
 
   // the last partial multiplier
   // For a-b*c (mult sub), regard multiplier as one part product
-  val partProductLast: UInt = Wire(UInt((w - 1).W))
+  val partProductLast: UInt = Wire(UInt(w.W))
   when(io.sub_vld) {
-    partProductLast := io.multiplier(w - 2, 0).asUInt
+    partProductLast := io.multiplier.asUInt
   }.otherwise {
-    partProductLast := 0.U((w - 1).W)
+    partProductLast := 0.U(w.W)
   }
 
   // total n + 2 partial products

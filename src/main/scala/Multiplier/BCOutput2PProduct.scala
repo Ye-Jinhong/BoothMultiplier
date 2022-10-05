@@ -27,12 +27,12 @@ object BCOutput2PProduct {
     valueLen.offset = (len - 2) * 2
 
     val valueLenPlus1 = Wire(new Value(w + 1))
-    val fill0Num: Int = if (w % 2 == 0) 5 else 4
-    valueLenPlus1.value := Cat(Fill(len - 3, "b10".asUInt), 0.U(1.W), Fill(fill0Num, 1.U(1.W)), bcOutputIndex(len - 1)._1.h(0))
+    val fill0Num: Int = if (w % 2 == 0) 4 else 3
+    valueLenPlus1.value := Cat(Fill(len - 3, "b10".asUInt), 0.U(1.W), Fill(fill0Num, 1.U(1.W)), bcOutputIndex(len - 1)._1.h)
     valueLenPlus1.offset = (len - 1) * 2
 
-    val valueLenPlus2 = Wire(new Value(w + 1))
-    valueLenPlus2.value := (if(w % 2 == 0) Cat(~pPLast(w - 2), pPLast) else Cat(~pPLast(w - 2), pPLast(w - 2), pPLast))
+    val valueLenPlus2 = Wire(new Value(w + 2))
+    valueLenPlus2.value := (if(w % 2 == 0) Cat(~pPLast(w - 1), pPLast) else Cat(~pPLast(w - 1), pPLast(w - 1), pPLast))
     valueLenPlus2.offset = 0
 
     val pProductPlus2: Seq[Value] = ((pProduct :+ valueLen) :+ valueLenPlus1) :+ valueLenPlus2
