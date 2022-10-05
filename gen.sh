@@ -31,7 +31,7 @@ genfile=./generated/Multiplier.v
 tochangehead="val cTypesCustom: Seq[Int] = Seq("
 tochangetail=")"
 # string=""
-if [[ ! -d "FPGA/scr/verilog/" ]];then
+if [[ ! -d "FPGA/src/verilog/" ]];then
 mkdir ./FPGA/scr/verilog/
 # else
 # echo "Floder is existing"
