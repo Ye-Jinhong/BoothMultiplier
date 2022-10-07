@@ -23,7 +23,8 @@ class MultiplierTest extends AnyFreeSpec with ChiselScalatestTester with BaseDat
     val product: Long = if(!sub) multiplier * multiplicand + addend else addend - multiplier * multiplicand
 //    println(s"product = ${product}")
     test(new Multiplier()){ c =>
-      println(s"${c.cTypes}")
+      if(c.autoGenArray)
+        println(s"${c.cTypes}")
       c.io.multiplier.poke(multiplier.asSInt(w.W))
       c.io.multiplicand.poke(multiplicand.asSInt(w.W))
       c.io.sub_vld.poke(sub.B)
