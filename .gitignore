@@ -44,6 +44,7 @@ test_run_dir/*
 *_summary.xml
 *_usage.xml
 *_xst.xrpt
+*.db
 
 # project-wide generated files
 *.gise
@@ -60,6 +61,7 @@ _ngo/
 _xmsgs/
 generated/
 null/
+.vscode/
 ### Eclipse template
 *.pydevproject
 .metadata

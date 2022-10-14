@@ -21,7 +21,7 @@ genlist() {
     done
 }
 
-n=6
+n=7
 counter=0
 
 srcfile=./src/main/scala/Multiplier/Topology.scala
@@ -64,10 +64,11 @@ do
     echo "$cTypes" >> list.txt
     # echo "jajaj" >> list.txt
 
+    sed -i "1i // cTypes = $cTypes" $genfile
     ml=`grep -n "module Multiplier"  $genfile | head -1 | cut -d ":" -f 1`
     clk=`grep -n "ifdef"  $genfile | head -1 | cut -d ":" -f 1`
     # ((clk=$clk-1))
-    sed -i "1i // cTypes = $cTypes" $genfile
+    sed -i "${ml}i (*use_dsp = \"yes\"*)" $genfile
     sed -i "$clk r clk.txt" $genfile
     ((ml=$ml+1))
     sed -i "$ml s/.*/module Multiplier$counter(/" $genfile

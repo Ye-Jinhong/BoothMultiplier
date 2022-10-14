@@ -1,3 +1,4 @@
+  wire clock;
   clk_wiz_0 clk_wiz
    (
     // Clock out ports
