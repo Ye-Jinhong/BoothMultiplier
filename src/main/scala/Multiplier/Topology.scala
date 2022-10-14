@@ -3,7 +3,7 @@ package Multiplier
 import chisel3.util._
 
 trait BaseData {
-  val w = 65
+  val w = 53
   val odd: Boolean = w % 2 == 1
   val isPipeline: Boolean = true
   val n: Int = if (odd) (w + 1) / 2 else w / 2
