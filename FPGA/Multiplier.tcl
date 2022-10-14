@@ -30,17 +30,11 @@
 #    "./src/verilog/Multiplier21.v"
 #    "./src/verilog/Multiplier42.v"
 #    "./src/verilog/Multiplier20.v"
-#    "./src/verilog/Multiplier43.v"
 #    "./src/verilog/Multiplier23.v"
-#    "./src/verilog/Multiplier44.v"
 #    "./src/verilog/Multiplier22.v"
-#    "./src/verilog/Multiplier45.v"
 #    "./src/verilog/Multiplier25.v"
-#    "./src/verilog/Multiplier46.v"
 #    "./src/verilog/Multiplier24.v"
-#    "./src/verilog/Multiplier47.v"
 #    "./src/verilog/Multiplier27.v"
-#    "./src/verilog/Multiplier48.v"
 #    "./src/verilog/Multiplier26.v"
 #    "./src/verilog/Multiplier29.v"
 #    "./src/verilog/Multiplier28.v"
@@ -94,17 +88,11 @@ proc checkRequiredFiles { origin_dir} {
    "./src/verilog/Multiplier21.v" \
    "./src/verilog/Multiplier42.v" \
    "./src/verilog/Multiplier20.v" \
-   "./src/verilog/Multiplier43.v" \
    "./src/verilog/Multiplier23.v" \
-   "./src/verilog/Multiplier44.v" \
    "./src/verilog/Multiplier22.v" \
-   "./src/verilog/Multiplier45.v" \
    "./src/verilog/Multiplier25.v" \
-   "./src/verilog/Multiplier46.v" \
    "./src/verilog/Multiplier24.v" \
-   "./src/verilog/Multiplier47.v" \
    "./src/verilog/Multiplier27.v" \
-   "./src/verilog/Multiplier48.v" \
    "./src/verilog/Multiplier26.v" \
    "./src/verilog/Multiplier29.v" \
    "./src/verilog/Multiplier28.v" \
@@ -273,17 +261,11 @@ set files [list \
  [file normalize "${origin_dir}/src/verilog/Multiplier21.v"]\
  [file normalize "${origin_dir}/src/verilog/Multiplier42.v"]\
  [file normalize "${origin_dir}/src/verilog/Multiplier20.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier43.v"]\
  [file normalize "${origin_dir}/src/verilog/Multiplier23.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier44.v"]\
  [file normalize "${origin_dir}/src/verilog/Multiplier22.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier45.v"]\
  [file normalize "${origin_dir}/src/verilog/Multiplier25.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier46.v"]\
  [file normalize "${origin_dir}/src/verilog/Multiplier24.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier47.v"]\
  [file normalize "${origin_dir}/src/verilog/Multiplier27.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier48.v"]\
  [file normalize "${origin_dir}/src/verilog/Multiplier26.v"]\
  [file normalize "${origin_dir}/src/verilog/Multiplier29.v"]\
  [file normalize "${origin_dir}/src/verilog/Multiplier28.v"]\
