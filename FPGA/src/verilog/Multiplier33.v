@@ -1,4 +1,4 @@
-// cTypes = List(4, 3, 3, 3, 3, 4)
+// cTypes = List(4, 3, 4, 3, 4, 3)
 module BoothCodeUnit(
   input  [64:0] io_A,
   input  [2:0]  io_code,
@@ -125,149 +125,140 @@ module Compressor32_5(
   assign io_s = _io_s_T ^ io_in_2; // @[Compressor32.scala 21:17]
   assign io_ca = _io_ca_T_2 | _io_ca_T_3; // @[Compressor32.scala 22:32]
 endmodule
-module Compressor32_6(
-  input  [85:0] io_in_0,
-  input  [85:0] io_in_1,
-  input  [85:0] io_in_2,
-  output [85:0] io_s,
-  output [85:0] io_ca
+module Compressor42_8(
+  input  [86:0] io_p_0,
+  input  [86:0] io_p_1,
+  input  [86:0] io_p_2,
+  input  [86:0] io_p_3,
+  output [86:0] io_s,
+  output [86:0] io_ca
 );
-  wire [85:0] _io_s_T = io_in_0 ^ io_in_1; // @[Compressor32.scala 21:13]
-  wire [85:0] _io_ca_T = io_in_0 & io_in_1; // @[Compressor32.scala 22:15]
-  wire [85:0] _io_ca_T_1 = io_in_0 & io_in_2; // @[Compressor32.scala 22:25]
-  wire [85:0] _io_ca_T_2 = _io_ca_T | _io_ca_T_1; // @[Compressor32.scala 22:20]
-  wire [85:0] _io_ca_T_3 = io_in_1 & io_in_2; // @[Compressor32.scala 22:37]
+  wire [86:0] xor0 = io_p_0 ^ io_p_1; // @[Compressor42.scala 19:19]
+  wire [86:0] _cout_T = xor0 & io_p_2; // @[Compressor42.scala 23:16]
+  wire [86:0] _cout_T_1 = ~xor0; // @[Compressor42.scala 23:30]
+  wire [86:0] _cout_T_2 = _cout_T_1 & io_p_0; // @[Compressor42.scala 23:44]
+  wire [86:0] cout = _cout_T | _cout_T_2; // @[Compressor42.scala 23:26]
+  wire [86:0] cin = {cout[85:0],1'h0}; // @[Cat.scala 31:58]
+  wire [86:0] xor1 = io_p_2 ^ io_p_3; // @[Compressor42.scala 20:19]
+  wire [86:0] xor2 = xor1 ^ xor0; // @[Compressor42.scala 21:16]
+  wire [86:0] _io_ca_T = xor2 & cin; // @[Compressor42.scala 25:17]
+  wire [86:0] _io_ca_T_1 = ~xor2; // @[Compressor42.scala 25:27]
+  wire [86:0] _io_ca_T_2 = _io_ca_T_1 & io_p_3; // @[Compressor42.scala 25:41]
+  assign io_s = xor2 ^ cin; // @[Compressor42.scala 24:16]
+  assign io_ca = _io_ca_T | _io_ca_T_2; // @[Compressor42.scala 25:23]
+endmodule
+module Compressor42_9(
+  input  [92:0] io_p_0,
+  input  [92:0] io_p_1,
+  input  [92:0] io_p_2,
+  input  [92:0] io_p_3,
+  output [92:0] io_s,
+  output [92:0] io_ca
+);
+  wire [92:0] xor0 = io_p_0 ^ io_p_1; // @[Compressor42.scala 19:19]
+  wire [92:0] _cout_T = xor0 & io_p_2; // @[Compressor42.scala 23:16]
+  wire [92:0] _cout_T_1 = ~xor0; // @[Compressor42.scala 23:30]
+  wire [92:0] _cout_T_2 = _cout_T_1 & io_p_0; // @[Compressor42.scala 23:44]
+  wire [92:0] cout = _cout_T | _cout_T_2; // @[Compressor42.scala 23:26]
+  wire [92:0] cin = {cout[91:0],1'h0}; // @[Cat.scala 31:58]
+  wire [92:0] xor1 = io_p_2 ^ io_p_3; // @[Compressor42.scala 20:19]
+  wire [92:0] xor2 = xor1 ^ xor0; // @[Compressor42.scala 21:16]
+  wire [92:0] _io_ca_T = xor2 & cin; // @[Compressor42.scala 25:17]
+  wire [92:0] _io_ca_T_1 = ~xor2; // @[Compressor42.scala 25:27]
+  wire [92:0] _io_ca_T_2 = _io_ca_T_1 & io_p_3; // @[Compressor42.scala 25:41]
+  assign io_s = xor2 ^ cin; // @[Compressor42.scala 24:16]
+  assign io_ca = _io_ca_T | _io_ca_T_2; // @[Compressor42.scala 25:23]
+endmodule
+module Compressor42_10(
+  input  [88:0] io_p_0,
+  input  [88:0] io_p_1,
+  input  [88:0] io_p_2,
+  input  [88:0] io_p_3,
+  output [88:0] io_s,
+  output [88:0] io_ca
+);
+  wire [88:0] xor0 = io_p_0 ^ io_p_1; // @[Compressor42.scala 19:19]
+  wire [88:0] _cout_T = xor0 & io_p_2; // @[Compressor42.scala 23:16]
+  wire [88:0] _cout_T_1 = ~xor0; // @[Compressor42.scala 23:30]
+  wire [88:0] _cout_T_2 = _cout_T_1 & io_p_0; // @[Compressor42.scala 23:44]
+  wire [88:0] cout = _cout_T | _cout_T_2; // @[Compressor42.scala 23:26]
+  wire [88:0] cin = {cout[87:0],1'h0}; // @[Cat.scala 31:58]
+  wire [88:0] xor1 = io_p_2 ^ io_p_3; // @[Compressor42.scala 20:19]
+  wire [88:0] xor2 = xor1 ^ xor0; // @[Compressor42.scala 21:16]
+  wire [88:0] _io_ca_T = xor2 & cin; // @[Compressor42.scala 25:17]
+  wire [88:0] _io_ca_T_1 = ~xor2; // @[Compressor42.scala 25:27]
+  wire [88:0] _io_ca_T_2 = _io_ca_T_1 & io_p_3; // @[Compressor42.scala 25:41]
+  assign io_s = xor2 ^ cin; // @[Compressor42.scala 24:16]
+  assign io_ca = _io_ca_T | _io_ca_T_2; // @[Compressor42.scala 25:23]
+endmodule
+module Compressor32_6(
+  input  [110:0] io_in_0,
+  input  [110:0] io_in_1,
+  input  [110:0] io_in_2,
+  output [110:0] io_s,
+  output [110:0] io_ca
+);
+  wire [110:0] _io_s_T = io_in_0 ^ io_in_1; // @[Compressor32.scala 21:13]
+  wire [110:0] _io_ca_T = io_in_0 & io_in_1; // @[Compressor32.scala 22:15]
+  wire [110:0] _io_ca_T_1 = io_in_0 & io_in_2; // @[Compressor32.scala 22:25]
+  wire [110:0] _io_ca_T_2 = _io_ca_T | _io_ca_T_1; // @[Compressor32.scala 22:20]
+  wire [110:0] _io_ca_T_3 = io_in_1 & io_in_2; // @[Compressor32.scala 22:37]
   assign io_s = _io_s_T ^ io_in_2; // @[Compressor32.scala 21:17]
   assign io_ca = _io_ca_T_2 | _io_ca_T_3; // @[Compressor32.scala 22:32]
 endmodule
 module Compressor32_7(
-  input  [97:0] io_in_0,
-  input  [97:0] io_in_1,
-  input  [97:0] io_in_2,
-  output [97:0] io_s,
-  output [97:0] io_ca
+  input  [112:0] io_in_0,
+  input  [112:0] io_in_1,
+  input  [112:0] io_in_2,
+  output [112:0] io_s,
+  output [112:0] io_ca
 );
-  wire [97:0] _io_s_T = io_in_0 ^ io_in_1; // @[Compressor32.scala 21:13]
-  wire [97:0] _io_ca_T = io_in_0 & io_in_1; // @[Compressor32.scala 22:15]
-  wire [97:0] _io_ca_T_1 = io_in_0 & io_in_2; // @[Compressor32.scala 22:25]
-  wire [97:0] _io_ca_T_2 = _io_ca_T | _io_ca_T_1; // @[Compressor32.scala 22:20]
-  wire [97:0] _io_ca_T_3 = io_in_1 & io_in_2; // @[Compressor32.scala 22:37]
+  wire [112:0] _io_s_T = io_in_0 ^ io_in_1; // @[Compressor32.scala 21:13]
+  wire [112:0] _io_ca_T = io_in_0 & io_in_1; // @[Compressor32.scala 22:15]
+  wire [112:0] _io_ca_T_1 = io_in_0 & io_in_2; // @[Compressor32.scala 22:25]
+  wire [112:0] _io_ca_T_2 = _io_ca_T | _io_ca_T_1; // @[Compressor32.scala 22:20]
+  wire [112:0] _io_ca_T_3 = io_in_1 & io_in_2; // @[Compressor32.scala 22:37]
+  assign io_s = _io_s_T ^ io_in_2; // @[Compressor32.scala 21:17]
+  assign io_ca = _io_ca_T_2 | _io_ca_T_3; // @[Compressor32.scala 22:32]
+endmodule
+module Compressor42_11(
+  input  [132:0] io_p_0,
+  input  [132:0] io_p_1,
+  input  [132:0] io_p_2,
+  input  [132:0] io_p_3,
+  output [132:0] io_s,
+  output [132:0] io_ca
+);
+  wire [132:0] xor0 = io_p_0 ^ io_p_1; // @[Compressor42.scala 19:19]
+  wire [132:0] _cout_T = xor0 & io_p_2; // @[Compressor42.scala 23:16]
+  wire [132:0] _cout_T_1 = ~xor0; // @[Compressor42.scala 23:30]
+  wire [132:0] _cout_T_2 = _cout_T_1 & io_p_0; // @[Compressor42.scala 23:44]
+  wire [132:0] cout = _cout_T | _cout_T_2; // @[Compressor42.scala 23:26]
+  wire [132:0] cin = {cout[131:0],1'h0}; // @[Cat.scala 31:58]
+  wire [132:0] xor1 = io_p_2 ^ io_p_3; // @[Compressor42.scala 20:19]
+  wire [132:0] xor2 = xor1 ^ xor0; // @[Compressor42.scala 21:16]
+  wire [132:0] _io_ca_T = xor2 & cin; // @[Compressor42.scala 25:17]
+  wire [132:0] _io_ca_T_1 = ~xor2; // @[Compressor42.scala 25:27]
+  wire [132:0] _io_ca_T_2 = _io_ca_T_1 & io_p_3; // @[Compressor42.scala 25:41]
+  assign io_s = xor2 ^ cin; // @[Compressor42.scala 24:16]
+  assign io_ca = _io_ca_T | _io_ca_T_2; // @[Compressor42.scala 25:23]
+endmodule
+module Compressor32_8(
+  input  [133:0] io_in_0,
+  input  [133:0] io_in_1,
+  input  [133:0] io_in_2,
+  output [133:0] io_s,
+  output [133:0] io_ca
+);
+  wire [133:0] _io_s_T = io_in_0 ^ io_in_1; // @[Compressor32.scala 21:13]
+  wire [133:0] _io_ca_T = io_in_0 & io_in_1; // @[Compressor32.scala 22:15]
+  wire [133:0] _io_ca_T_1 = io_in_0 & io_in_2; // @[Compressor32.scala 22:25]
+  wire [133:0] _io_ca_T_2 = _io_ca_T | _io_ca_T_1; // @[Compressor32.scala 22:20]
+  wire [133:0] _io_ca_T_3 = io_in_1 & io_in_2; // @[Compressor32.scala 22:37]
   assign io_s = _io_s_T ^ io_in_2; // @[Compressor32.scala 21:17]
   assign io_ca = _io_ca_T_2 | _io_ca_T_3; // @[Compressor32.scala 22:32]
 endmodule
 module Compressor32_9(
-  input  [87:0] io_in_0,
-  input  [87:0] io_in_1,
-  input  [87:0] io_in_2,
-  output [87:0] io_s,
-  output [87:0] io_ca
-);
-  wire [87:0] _io_s_T = io_in_0 ^ io_in_1; // @[Compressor32.scala 21:13]
-  wire [87:0] _io_ca_T = io_in_0 & io_in_1; // @[Compressor32.scala 22:15]
-  wire [87:0] _io_ca_T_1 = io_in_0 & io_in_2; // @[Compressor32.scala 22:25]
-  wire [87:0] _io_ca_T_2 = _io_ca_T | _io_ca_T_1; // @[Compressor32.scala 22:20]
-  wire [87:0] _io_ca_T_3 = io_in_1 & io_in_2; // @[Compressor32.scala 22:37]
-  assign io_s = _io_s_T ^ io_in_2; // @[Compressor32.scala 21:17]
-  assign io_ca = _io_ca_T_2 | _io_ca_T_3; // @[Compressor32.scala 22:32]
-endmodule
-module Compressor32_10(
-  input  [86:0] io_in_0,
-  input  [86:0] io_in_1,
-  input  [86:0] io_in_2,
-  output [86:0] io_s,
-  output [86:0] io_ca
-);
-  wire [86:0] _io_s_T = io_in_0 ^ io_in_1; // @[Compressor32.scala 21:13]
-  wire [86:0] _io_ca_T = io_in_0 & io_in_1; // @[Compressor32.scala 22:15]
-  wire [86:0] _io_ca_T_1 = io_in_0 & io_in_2; // @[Compressor32.scala 22:25]
-  wire [86:0] _io_ca_T_2 = _io_ca_T | _io_ca_T_1; // @[Compressor32.scala 22:20]
-  wire [86:0] _io_ca_T_3 = io_in_1 & io_in_2; // @[Compressor32.scala 22:37]
-  assign io_s = _io_s_T ^ io_in_2; // @[Compressor32.scala 21:17]
-  assign io_ca = _io_ca_T_2 | _io_ca_T_3; // @[Compressor32.scala 22:32]
-endmodule
-module Compressor32_11(
-  input  [120:0] io_in_0,
-  input  [120:0] io_in_1,
-  input  [120:0] io_in_2,
-  output [120:0] io_s,
-  output [120:0] io_ca
-);
-  wire [120:0] _io_s_T = io_in_0 ^ io_in_1; // @[Compressor32.scala 21:13]
-  wire [120:0] _io_ca_T = io_in_0 & io_in_1; // @[Compressor32.scala 22:15]
-  wire [120:0] _io_ca_T_1 = io_in_0 & io_in_2; // @[Compressor32.scala 22:25]
-  wire [120:0] _io_ca_T_2 = _io_ca_T | _io_ca_T_1; // @[Compressor32.scala 22:20]
-  wire [120:0] _io_ca_T_3 = io_in_1 & io_in_2; // @[Compressor32.scala 22:37]
-  assign io_s = _io_s_T ^ io_in_2; // @[Compressor32.scala 21:17]
-  assign io_ca = _io_ca_T_2 | _io_ca_T_3; // @[Compressor32.scala 22:32]
-endmodule
-module Compressor32_12(
-  input  [103:0] io_in_0,
-  input  [103:0] io_in_1,
-  input  [103:0] io_in_2,
-  output [103:0] io_s,
-  output [103:0] io_ca
-);
-  wire [103:0] _io_s_T = io_in_0 ^ io_in_1; // @[Compressor32.scala 21:13]
-  wire [103:0] _io_ca_T = io_in_0 & io_in_1; // @[Compressor32.scala 22:15]
-  wire [103:0] _io_ca_T_1 = io_in_0 & io_in_2; // @[Compressor32.scala 22:25]
-  wire [103:0] _io_ca_T_2 = _io_ca_T | _io_ca_T_1; // @[Compressor32.scala 22:20]
-  wire [103:0] _io_ca_T_3 = io_in_1 & io_in_2; // @[Compressor32.scala 22:37]
-  assign io_s = _io_s_T ^ io_in_2; // @[Compressor32.scala 21:17]
-  assign io_ca = _io_ca_T_2 | _io_ca_T_3; // @[Compressor32.scala 22:32]
-endmodule
-module Compressor32_13(
-  input  [124:0] io_in_0,
-  input  [124:0] io_in_1,
-  input  [124:0] io_in_2,
-  output [124:0] io_s,
-  output [124:0] io_ca
-);
-  wire [124:0] _io_s_T = io_in_0 ^ io_in_1; // @[Compressor32.scala 21:13]
-  wire [124:0] _io_ca_T = io_in_0 & io_in_1; // @[Compressor32.scala 22:15]
-  wire [124:0] _io_ca_T_1 = io_in_0 & io_in_2; // @[Compressor32.scala 22:25]
-  wire [124:0] _io_ca_T_2 = _io_ca_T | _io_ca_T_1; // @[Compressor32.scala 22:20]
-  wire [124:0] _io_ca_T_3 = io_in_1 & io_in_2; // @[Compressor32.scala 22:37]
-  assign io_s = _io_s_T ^ io_in_2; // @[Compressor32.scala 21:17]
-  assign io_ca = _io_ca_T_2 | _io_ca_T_3; // @[Compressor32.scala 22:32]
-endmodule
-module Compressor32_14(
-  input  [127:0] io_in_0,
-  input  [127:0] io_in_1,
-  input  [127:0] io_in_2,
-  output [127:0] io_s,
-  output [127:0] io_ca
-);
-  wire [127:0] _io_s_T = io_in_0 ^ io_in_1; // @[Compressor32.scala 21:13]
-  wire [127:0] _io_ca_T = io_in_0 & io_in_1; // @[Compressor32.scala 22:15]
-  wire [127:0] _io_ca_T_1 = io_in_0 & io_in_2; // @[Compressor32.scala 22:25]
-  wire [127:0] _io_ca_T_2 = _io_ca_T | _io_ca_T_1; // @[Compressor32.scala 22:20]
-  wire [127:0] _io_ca_T_3 = io_in_1 & io_in_2; // @[Compressor32.scala 22:37]
-  assign io_s = _io_s_T ^ io_in_2; // @[Compressor32.scala 21:17]
-  assign io_ca = _io_ca_T_2 | _io_ca_T_3; // @[Compressor32.scala 22:32]
-endmodule
-module Compressor42_8(
-  input  [133:0] io_p_0,
-  input  [133:0] io_p_1,
-  input  [133:0] io_p_2,
-  input  [133:0] io_p_3,
-  output [133:0] io_s,
-  output [133:0] io_ca
-);
-  wire [133:0] xor0 = io_p_0 ^ io_p_1; // @[Compressor42.scala 19:19]
-  wire [133:0] _cout_T = xor0 & io_p_2; // @[Compressor42.scala 23:16]
-  wire [133:0] _cout_T_1 = ~xor0; // @[Compressor42.scala 23:30]
-  wire [133:0] _cout_T_2 = _cout_T_1 & io_p_0; // @[Compressor42.scala 23:44]
-  wire [133:0] cout = _cout_T | _cout_T_2; // @[Compressor42.scala 23:26]
-  wire [133:0] cin = {cout[132:0],1'h0}; // @[Cat.scala 31:58]
-  wire [133:0] xor1 = io_p_2 ^ io_p_3; // @[Compressor42.scala 20:19]
-  wire [133:0] xor2 = xor1 ^ xor0; // @[Compressor42.scala 21:16]
-  wire [133:0] _io_ca_T = xor2 & cin; // @[Compressor42.scala 25:17]
-  wire [133:0] _io_ca_T_1 = ~xor2; // @[Compressor42.scala 25:27]
-  wire [133:0] _io_ca_T_2 = _io_ca_T_1 & io_p_3; // @[Compressor42.scala 25:41]
-  assign io_s = xor2 ^ cin; // @[Compressor42.scala 24:16]
-  assign io_ca = _io_ca_T | _io_ca_T_2; // @[Compressor42.scala 25:23]
-endmodule
-module Compressor32_15(
   input  [64:0] io_in_0,
   input  [64:0] io_in_1,
   input  [64:0] io_in_2,
@@ -316,10 +307,9 @@ module Multiplier33(
   reg [95:0] _RAND_10;
   reg [95:0] _RAND_11;
   reg [95:0] _RAND_12;
-  reg [127:0] _RAND_13;
-  reg [127:0] _RAND_14;
-  reg [127:0] _RAND_15;
-  reg [127:0] _RAND_16;
+  reg [159:0] _RAND_13;
+  reg [159:0] _RAND_14;
+  reg [95:0] _RAND_15;
 `endif // RANDOMIZE_REG_INIT
   wire [64:0] boothCodeOutput_boothCodeUnit_io_A; // @[BoothCode.scala 66:31]
   wire [2:0] boothCodeOutput_boothCodeUnit_io_code; // @[BoothCode.scala 66:31]
@@ -564,65 +554,53 @@ module Multiplier33(
   wire [78:0] compressorOutLast_outs_compressor32_5_io_in_2; // @[Compressor32.scala 42:44]
   wire [78:0] compressorOutLast_outs_compressor32_5_io_s; // @[Compressor32.scala 42:44]
   wire [78:0] compressorOutLast_outs_compressor32_5_io_ca; // @[Compressor32.scala 42:44]
-  wire [85:0] compressorOutLast_outs_compressor32_6_io_in_0; // @[Compressor32.scala 42:44]
-  wire [85:0] compressorOutLast_outs_compressor32_6_io_in_1; // @[Compressor32.scala 42:44]
-  wire [85:0] compressorOutLast_outs_compressor32_6_io_in_2; // @[Compressor32.scala 42:44]
-  wire [85:0] compressorOutLast_outs_compressor32_6_io_s; // @[Compressor32.scala 42:44]
-  wire [85:0] compressorOutLast_outs_compressor32_6_io_ca; // @[Compressor32.scala 42:44]
-  wire [97:0] compressorOutLast_outs_compressor32_7_io_in_0; // @[Compressor32.scala 42:44]
-  wire [97:0] compressorOutLast_outs_compressor32_7_io_in_1; // @[Compressor32.scala 42:44]
-  wire [97:0] compressorOutLast_outs_compressor32_7_io_in_2; // @[Compressor32.scala 42:44]
-  wire [97:0] compressorOutLast_outs_compressor32_7_io_s; // @[Compressor32.scala 42:44]
-  wire [97:0] compressorOutLast_outs_compressor32_7_io_ca; // @[Compressor32.scala 42:44]
-  wire [97:0] compressorOutLast_outs_compressor32_8_io_in_0; // @[Compressor32.scala 42:44]
-  wire [97:0] compressorOutLast_outs_compressor32_8_io_in_1; // @[Compressor32.scala 42:44]
-  wire [97:0] compressorOutLast_outs_compressor32_8_io_in_2; // @[Compressor32.scala 42:44]
-  wire [97:0] compressorOutLast_outs_compressor32_8_io_s; // @[Compressor32.scala 42:44]
-  wire [97:0] compressorOutLast_outs_compressor32_8_io_ca; // @[Compressor32.scala 42:44]
-  wire [87:0] compressorOutLast_outs_compressor32_9_io_in_0; // @[Compressor32.scala 42:44]
-  wire [87:0] compressorOutLast_outs_compressor32_9_io_in_1; // @[Compressor32.scala 42:44]
-  wire [87:0] compressorOutLast_outs_compressor32_9_io_in_2; // @[Compressor32.scala 42:44]
-  wire [87:0] compressorOutLast_outs_compressor32_9_io_s; // @[Compressor32.scala 42:44]
-  wire [87:0] compressorOutLast_outs_compressor32_9_io_ca; // @[Compressor32.scala 42:44]
-  wire [86:0] compressorOutLast_outs_compressor32_10_io_in_0; // @[Compressor32.scala 42:44]
-  wire [86:0] compressorOutLast_outs_compressor32_10_io_in_1; // @[Compressor32.scala 42:44]
-  wire [86:0] compressorOutLast_outs_compressor32_10_io_in_2; // @[Compressor32.scala 42:44]
-  wire [86:0] compressorOutLast_outs_compressor32_10_io_s; // @[Compressor32.scala 42:44]
-  wire [86:0] compressorOutLast_outs_compressor32_10_io_ca; // @[Compressor32.scala 42:44]
-  wire [120:0] compressorOutLast_outs_compressor32_11_io_in_0; // @[Compressor32.scala 42:44]
-  wire [120:0] compressorOutLast_outs_compressor32_11_io_in_1; // @[Compressor32.scala 42:44]
-  wire [120:0] compressorOutLast_outs_compressor32_11_io_in_2; // @[Compressor32.scala 42:44]
-  wire [120:0] compressorOutLast_outs_compressor32_11_io_s; // @[Compressor32.scala 42:44]
-  wire [120:0] compressorOutLast_outs_compressor32_11_io_ca; // @[Compressor32.scala 42:44]
-  wire [103:0] compressorOutLast_outs_compressor32_12_io_in_0; // @[Compressor32.scala 42:44]
-  wire [103:0] compressorOutLast_outs_compressor32_12_io_in_1; // @[Compressor32.scala 42:44]
-  wire [103:0] compressorOutLast_outs_compressor32_12_io_in_2; // @[Compressor32.scala 42:44]
-  wire [103:0] compressorOutLast_outs_compressor32_12_io_s; // @[Compressor32.scala 42:44]
-  wire [103:0] compressorOutLast_outs_compressor32_12_io_ca; // @[Compressor32.scala 42:44]
-  wire [124:0] compressorOutLast_outs_compressor32_13_io_in_0; // @[Compressor32.scala 42:44]
-  wire [124:0] compressorOutLast_outs_compressor32_13_io_in_1; // @[Compressor32.scala 42:44]
-  wire [124:0] compressorOutLast_outs_compressor32_13_io_in_2; // @[Compressor32.scala 42:44]
-  wire [124:0] compressorOutLast_outs_compressor32_13_io_s; // @[Compressor32.scala 42:44]
-  wire [124:0] compressorOutLast_outs_compressor32_13_io_ca; // @[Compressor32.scala 42:44]
-  wire [127:0] compressorOutLast_outs_compressor32_14_io_in_0; // @[Compressor32.scala 42:44]
-  wire [127:0] compressorOutLast_outs_compressor32_14_io_in_1; // @[Compressor32.scala 42:44]
-  wire [127:0] compressorOutLast_outs_compressor32_14_io_in_2; // @[Compressor32.scala 42:44]
-  wire [127:0] compressorOutLast_outs_compressor32_14_io_s; // @[Compressor32.scala 42:44]
-  wire [127:0] compressorOutLast_outs_compressor32_14_io_ca; // @[Compressor32.scala 42:44]
-  wire [133:0] compressorOutLast_outs_compressor42_8_io_p_0; // @[Compressor42.scala 50:44]
-  wire [133:0] compressorOutLast_outs_compressor42_8_io_p_1; // @[Compressor42.scala 50:44]
-  wire [133:0] compressorOutLast_outs_compressor42_8_io_p_2; // @[Compressor42.scala 50:44]
-  wire [133:0] compressorOutLast_outs_compressor42_8_io_p_3; // @[Compressor42.scala 50:44]
-  wire [133:0] compressorOutLast_outs_compressor42_8_io_s; // @[Compressor42.scala 50:44]
-  wire [133:0] compressorOutLast_outs_compressor42_8_io_ca; // @[Compressor42.scala 50:44]
+  wire [86:0] compressorOutLast_outs_compressor42_8_io_p_0; // @[Compressor42.scala 50:44]
+  wire [86:0] compressorOutLast_outs_compressor42_8_io_p_1; // @[Compressor42.scala 50:44]
+  wire [86:0] compressorOutLast_outs_compressor42_8_io_p_2; // @[Compressor42.scala 50:44]
+  wire [86:0] compressorOutLast_outs_compressor42_8_io_p_3; // @[Compressor42.scala 50:44]
+  wire [86:0] compressorOutLast_outs_compressor42_8_io_s; // @[Compressor42.scala 50:44]
+  wire [86:0] compressorOutLast_outs_compressor42_8_io_ca; // @[Compressor42.scala 50:44]
+  wire [92:0] compressorOutLast_outs_compressor42_9_io_p_0; // @[Compressor42.scala 50:44]
+  wire [92:0] compressorOutLast_outs_compressor42_9_io_p_1; // @[Compressor42.scala 50:44]
+  wire [92:0] compressorOutLast_outs_compressor42_9_io_p_2; // @[Compressor42.scala 50:44]
+  wire [92:0] compressorOutLast_outs_compressor42_9_io_p_3; // @[Compressor42.scala 50:44]
+  wire [92:0] compressorOutLast_outs_compressor42_9_io_s; // @[Compressor42.scala 50:44]
+  wire [92:0] compressorOutLast_outs_compressor42_9_io_ca; // @[Compressor42.scala 50:44]
+  wire [88:0] compressorOutLast_outs_compressor42_10_io_p_0; // @[Compressor42.scala 50:44]
+  wire [88:0] compressorOutLast_outs_compressor42_10_io_p_1; // @[Compressor42.scala 50:44]
+  wire [88:0] compressorOutLast_outs_compressor42_10_io_p_2; // @[Compressor42.scala 50:44]
+  wire [88:0] compressorOutLast_outs_compressor42_10_io_p_3; // @[Compressor42.scala 50:44]
+  wire [88:0] compressorOutLast_outs_compressor42_10_io_s; // @[Compressor42.scala 50:44]
+  wire [88:0] compressorOutLast_outs_compressor42_10_io_ca; // @[Compressor42.scala 50:44]
+  wire [110:0] compressorOutLast_outs_compressor32_6_io_in_0; // @[Compressor32.scala 42:44]
+  wire [110:0] compressorOutLast_outs_compressor32_6_io_in_1; // @[Compressor32.scala 42:44]
+  wire [110:0] compressorOutLast_outs_compressor32_6_io_in_2; // @[Compressor32.scala 42:44]
+  wire [110:0] compressorOutLast_outs_compressor32_6_io_s; // @[Compressor32.scala 42:44]
+  wire [110:0] compressorOutLast_outs_compressor32_6_io_ca; // @[Compressor32.scala 42:44]
+  wire [112:0] compressorOutLast_outs_compressor32_7_io_in_0; // @[Compressor32.scala 42:44]
+  wire [112:0] compressorOutLast_outs_compressor32_7_io_in_1; // @[Compressor32.scala 42:44]
+  wire [112:0] compressorOutLast_outs_compressor32_7_io_in_2; // @[Compressor32.scala 42:44]
+  wire [112:0] compressorOutLast_outs_compressor32_7_io_s; // @[Compressor32.scala 42:44]
+  wire [112:0] compressorOutLast_outs_compressor32_7_io_ca; // @[Compressor32.scala 42:44]
+  wire [132:0] compressorOutLast_outs_compressor42_11_io_p_0; // @[Compressor42.scala 50:44]
+  wire [132:0] compressorOutLast_outs_compressor42_11_io_p_1; // @[Compressor42.scala 50:44]
+  wire [132:0] compressorOutLast_outs_compressor42_11_io_p_2; // @[Compressor42.scala 50:44]
+  wire [132:0] compressorOutLast_outs_compressor42_11_io_p_3; // @[Compressor42.scala 50:44]
+  wire [132:0] compressorOutLast_outs_compressor42_11_io_s; // @[Compressor42.scala 50:44]
+  wire [132:0] compressorOutLast_outs_compressor42_11_io_ca; // @[Compressor42.scala 50:44]
+  wire [133:0] compressorOutLast_outs_compressor32_8_io_in_0; // @[Compressor32.scala 42:44]
+  wire [133:0] compressorOutLast_outs_compressor32_8_io_in_1; // @[Compressor32.scala 42:44]
+  wire [133:0] compressorOutLast_outs_compressor32_8_io_in_2; // @[Compressor32.scala 42:44]
+  wire [133:0] compressorOutLast_outs_compressor32_8_io_s; // @[Compressor32.scala 42:44]
+  wire [133:0] compressorOutLast_outs_compressor32_8_io_ca; // @[Compressor32.scala 42:44]
   wire [64:0] compressor32Out_compressor32_io_in_0; // @[Compressor32.scala 42:44]
   wire [64:0] compressor32Out_compressor32_io_in_1; // @[Compressor32.scala 42:44]
   wire [64:0] compressor32Out_compressor32_io_in_2; // @[Compressor32.scala 42:44]
   wire [64:0] compressor32Out_compressor32_io_s; // @[Compressor32.scala 42:44]
   wire [64:0] compressor32Out_compressor32_io_ca; // @[Compressor32.scala 42:44]
-  wire [64:0] _multiplicand_not_T_2 = ~io_multiplicand; // @[Multiplier.scala 23:44]
-  wire [64:0] _boothCodeOutput_T = io_multiplier; // @[Multiplier.scala 29:92]
-  wire [63:0] partProductLast = io_sub_vld ? io_multiplier[63:0] : 64'h0; // @[Multiplier.scala 34:20 35:21 37:21]
+  wire [64:0] _multiplicand_not_T_2 = ~io_multiplicand; // @[Multiplier.scala 22:44]
+  wire [64:0] _boothCodeOutput_T = io_multiplier; // @[Multiplier.scala 28:92]
+  wire [64:0] partProductLast = io_sub_vld ? io_multiplier : 65'h0; // @[Multiplier.scala 33:20 34:21 36:21]
   wire  boothCodeOutput_0_sn = boothCodeOutput_boothCodeUnit_io_boothCodeOutput_sn; // @[BoothCode.scala 83:{14,14}]
   wire  _partProducts_pProduct_0_value_T = ~boothCodeOutput_0_sn; // @[BCOutput2PProduct.scala 14:58]
   wire [65:0] boothCodeOutput_0_product = boothCodeOutput_boothCodeUnit_io_boothCodeOutput_product; // @[BoothCode.scala 83:{14,14}]
@@ -742,9 +720,9 @@ module Multiplier33(
   wire [1:0] boothCodeOutput_31_h = boothCodeOutput_boothCodeUnit_31_io_boothCodeOutput_h; // @[BoothCode.scala 87:{14,14}]
   wire [68:0] _partProducts_valueLen_value_T = {boothCodeOutput_32_sn,boothCodeOutput_32_product,boothCodeOutput_31_h}; // @[Cat.scala 31:58]
   wire [1:0] boothCodeOutput_32_h = boothCodeOutput_boothCodeUnit_32_io_boothCodeOutput_h; // @[BoothCode.scala 91:{14,14}]
-  wire [65:0] partProducts_33_value = {61'h1555555555555554,4'hf,boothCodeOutput_32_h[0]}; // @[Cat.scala 31:58]
-  wire  _partProducts_valueLenPlus2_value_T_1 = ~partProductLast[63]; // @[BCOutput2PProduct.scala 35:81]
-  wire [65:0] partProducts_34_value = {_partProducts_valueLenPlus2_value_T_1,partProductLast[63],partProductLast}; // @[Cat.scala 31:58]
+  wire [65:0] partProducts_33_value = {61'h1555555555555554,3'h7,boothCodeOutput_32_h}; // @[Cat.scala 31:58]
+  wire  _partProducts_valueLenPlus2_value_T_1 = ~partProductLast[64]; // @[BCOutput2PProduct.scala 35:81]
+  wire [66:0] partProducts_34_value = {_partProducts_valueLenPlus2_value_T_1,partProductLast[64],partProductLast}; // @[Cat.scala 31:58]
   wire [70:0] _compressorOutLast_outs_compressor42_io_p_1_T_1 = {boothCodeOutput_28_sn,boothCodeOutput_28_product,
     boothCodeOutput_27_h,2'h0}; // @[Cat.scala 31:58]
   wire [72:0] _compressorOutLast_outs_compressor42_io_p_2_T_1 = {boothCodeOutput_29_sn,boothCodeOutput_29_product,
@@ -816,62 +794,55 @@ module Multiplier33(
   reg [76:0] compressorOutLast_regC_11; // @[Compressor.scala 109:29]
   wire [76:0] compressorOutLast_outs_8_ca_value = compressorOutLast_outs_compressor32_io_ca; // @[Compressor32.scala 49:50 51:31]
   reg [65:0] compressorOutLast_regC_12; // @[Compressor.scala 109:29]
-  wire [84:0] _compressorOutLast_outs_compressor32_io_in_1_T_10 = {compressorOutLast_regC_10,8'h0}; // @[Cat.scala 31:58]
-  wire [83:0] _compressorOutLast_outs_compressor32_io_in_1_T_11 = {compressorOutLast_regC_7,1'h0}; // @[Cat.scala 31:58]
-  wire [96:0] _compressorOutLast_outs_compressor32_io_in_1_T_13 = {compressorOutLast_regC_4,14'h0}; // @[Cat.scala 31:58]
-  wire [79:0] _compressorOutLast_outs_compressor32_io_in_1_T_14 = {compressorOutLast_regC_1,1'h0}; // @[Cat.scala 31:58]
-  wire [84:0] _compressorOutLast_outs_compressor32_io_in_0_T_1 = {compressorOutLast_regC_12,19'h0}; // @[Cat.scala 31:58]
-  wire [85:0] compressorOutLast_outs_14_ca_value = compressorOutLast_outs_compressor32_6_io_ca; // @[Compressor32.scala 49:50 51:31]
-  wire [97:0] compressorOutLast_outs_15_s_value = compressorOutLast_outs_compressor32_7_io_s; // @[Compressor32.scala 49:50 50:30]
-  wire [119:0] _compressorOutLast_outs_compressor32_io_in_1_T_16 = {compressorOutLast_outs_15_s_value,22'h0}; // @[Cat.scala 31:58]
-  wire [97:0] compressorOutLast_outs_15_ca_value = compressorOutLast_outs_compressor32_7_io_ca; // @[Compressor32.scala 49:50 51:31]
-  wire [87:0] compressorOutLast_outs_17_ca_value = compressorOutLast_outs_compressor32_9_io_ca; // @[Compressor32.scala 49:50 51:31]
-  wire [88:0] _compressorOutLast_outs_compressor32_io_in_1_T_17 = {compressorOutLast_outs_17_ca_value,1'h0}; // @[Cat.scala 31:58]
-  wire [97:0] compressorOutLast_outs_16_s_value = compressorOutLast_outs_compressor32_8_io_s; // @[Compressor32.scala 49:50 50:30]
-  wire [86:0] compressorOutLast_outs_18_s_value = compressorOutLast_outs_compressor32_10_io_s; // @[Compressor32.scala 49:50 50:30]
-  wire [123:0] _compressorOutLast_outs_compressor32_io_in_1_T_19 = {compressorOutLast_outs_18_s_value,37'h0}; // @[Cat.scala 31:58]
-  wire [86:0] compressorOutLast_outs_18_ca_value = compressorOutLast_outs_compressor32_10_io_ca; // @[Compressor32.scala 49:50 51:31]
-  wire [103:0] compressorOutLast_outs_20_ca_value = compressorOutLast_outs_compressor32_12_io_ca; // @[Compressor32.scala 49:50 51:31]
-  wire [104:0] _compressorOutLast_outs_compressor32_io_in_1_T_20 = {compressorOutLast_outs_20_ca_value,1'h0}; // @[Cat.scala 31:58]
-  wire [120:0] compressorOutLast_outs_19_s_value = compressorOutLast_outs_compressor32_11_io_s; // @[Compressor32.scala 49:50 50:30]
-  reg [127:0] compressorOutLast_regC_13; // @[Compressor.scala 109:29]
-  wire [127:0] compressorOutLast_outs_22_s_value = compressorOutLast_outs_compressor32_14_io_s; // @[Compressor32.scala 49:50 50:30]
-  reg [127:0] compressorOutLast_regC_14; // @[Compressor.scala 109:29]
-  wire [127:0] compressorOutLast_outs_22_ca_value = compressorOutLast_outs_compressor32_14_io_ca; // @[Compressor32.scala 49:50 51:31]
-  reg [124:0] compressorOutLast_regC_15; // @[Compressor.scala 109:29]
-  wire [124:0] compressorOutLast_outs_21_s_value = compressorOutLast_outs_compressor32_13_io_s; // @[Compressor32.scala 49:50 50:30]
-  reg [124:0] compressorOutLast_regC_16; // @[Compressor.scala 109:29]
-  wire [124:0] compressorOutLast_outs_21_ca_value = compressorOutLast_outs_compressor32_13_io_ca; // @[Compressor32.scala 49:50 51:31]
-  wire [128:0] _compressorOutLast_outs_compressor42_io_p_1_T_14 = {compressorOutLast_regC_14,1'h0}; // @[Cat.scala 31:58]
-  wire [132:0] _compressorOutLast_outs_compressor42_io_p_2_T_15 = {compressorOutLast_regC_15,8'h0}; // @[Cat.scala 31:58]
-  wire [133:0] compressorOutLast_outs_23_s_value = compressorOutLast_outs_compressor42_8_io_s; // @[Compressor42.scala 57:50 58:30]
-  wire [129:0] sum = compressorOutLast_outs_23_s_value[129:0]; // @[Multiplier.scala 55:23 58:7]
+  wire [83:0] _compressorOutLast_outs_compressor42_io_p_1_T_14 = {compressorOutLast_regC_9,1'h0}; // @[Cat.scala 31:58]
+  wire [85:0] _compressorOutLast_outs_compressor42_io_p_2_T_15 = {compressorOutLast_regC_10,9'h0}; // @[Cat.scala 31:58]
+  wire [83:0] _compressorOutLast_outs_compressor42_io_p_1_T_15 = {compressorOutLast_regC_5,1'h0}; // @[Cat.scala 31:58]
+  wire [91:0] _compressorOutLast_outs_compressor42_io_p_2_T_17 = {compressorOutLast_regC_6,9'h0}; // @[Cat.scala 31:58]
+  wire [79:0] _compressorOutLast_outs_compressor42_io_p_1_T_16 = {compressorOutLast_regC_1,1'h0}; // @[Cat.scala 31:58]
+  wire [87:0] _compressorOutLast_outs_compressor42_io_p_2_T_19 = {compressorOutLast_regC_2,5'h0}; // @[Cat.scala 31:58]
+  wire [86:0] compressorOutLast_outs_14_s_value = compressorOutLast_outs_compressor42_8_io_s; // @[Compressor42.scala 57:50 58:30]
+  wire [109:0] _compressorOutLast_outs_compressor32_io_in_1_T_10 = {compressorOutLast_outs_14_s_value,23'h0}; // @[Cat.scala 31:58]
+  wire [86:0] compressorOutLast_outs_14_ca_value = compressorOutLast_outs_compressor42_8_io_ca; // @[Compressor42.scala 57:50 59:31]
+  wire [88:0] compressorOutLast_outs_16_ca_value = compressorOutLast_outs_compressor42_10_io_ca; // @[Compressor42.scala 57:50 59:31]
+  wire [89:0] _compressorOutLast_outs_compressor32_io_in_1_T_11 = {compressorOutLast_outs_16_ca_value,1'h0}; // @[Cat.scala 31:58]
+  wire [92:0] compressorOutLast_outs_15_s_value = compressorOutLast_outs_compressor42_9_io_s; // @[Compressor42.scala 57:50 58:30]
+  wire [112:0] compressorOutLast_outs_18_ca_value = compressorOutLast_outs_compressor32_7_io_ca; // @[Compressor32.scala 49:50 51:31]
+  wire [113:0] _compressorOutLast_outs_compressor42_io_p_1_T_17 = {compressorOutLast_outs_18_ca_value,1'h0}; // @[Cat.scala 31:58]
+  wire [110:0] compressorOutLast_outs_17_s_value = compressorOutLast_outs_compressor32_6_io_s; // @[Compressor32.scala 49:50 50:30]
+  wire [131:0] _compressorOutLast_outs_compressor42_io_p_2_T_21 = {compressorOutLast_outs_17_s_value,21'h0}; // @[Cat.scala 31:58]
+  wire [110:0] compressorOutLast_outs_17_ca_value = compressorOutLast_outs_compressor32_6_io_ca; // @[Compressor32.scala 49:50 51:31]
+  reg [132:0] compressorOutLast_regC_13; // @[Compressor.scala 109:29]
+  wire [132:0] compressorOutLast_outs_19_s_value = compressorOutLast_outs_compressor42_11_io_s; // @[Compressor42.scala 57:50 58:30]
+  reg [132:0] compressorOutLast_regC_14; // @[Compressor.scala 109:29]
+  wire [132:0] compressorOutLast_outs_19_ca_value = compressorOutLast_outs_compressor42_11_io_ca; // @[Compressor42.scala 57:50 59:31]
+  reg [65:0] compressorOutLast_regC_15; // @[Compressor.scala 109:29]
+  wire [129:0] _compressorOutLast_outs_compressor32_io_in_0_T_1 = {compressorOutLast_regC_15,64'h0}; // @[Cat.scala 31:58]
+  wire [133:0] compressorOutLast_outs_20_s_value = compressorOutLast_outs_compressor32_8_io_s; // @[Compressor32.scala 49:50 50:30]
+  wire [129:0] sum = compressorOutLast_outs_20_s_value[129:0]; // @[Multiplier.scala 54:23 57:7]
   wire [63:0] compressor32Out_compressor32In_0_value = sum[63:0]; // @[AddAddend.scala 8:35]
-  wire [133:0] compressorOutLast_outs_23_ca_value = compressorOutLast_outs_compressor42_8_io_ca; // @[Compressor42.scala 57:50 59:31]
-  wire [129:0] carry = compressorOutLast_outs_23_ca_value[129:0]; // @[Multiplier.scala 56:25 59:9]
+  wire [133:0] compressorOutLast_outs_20_ca_value = compressorOutLast_outs_compressor32_8_io_ca; // @[Compressor32.scala 49:50 51:31]
+  wire [129:0] carry = compressorOutLast_outs_20_ca_value[129:0]; // @[Multiplier.scala 55:25 58:9]
   wire [63:0] compressor32Out_compressor32In_1_value = carry[63:0]; // @[AddAddend.scala 10:37]
   wire [63:0] compressor32Out_compressor32In_2_value = io_addend[63:0]; // @[AddAddend.scala 12:39]
-  wire [130:0] _productMult_T = {carry, 1'h0}; // @[Multiplier.scala 71:25]
-  wire [130:0] _GEN_20 = {{1'd0}, sum}; // @[Multiplier.scala 71:38]
-  wire [130:0] _productMult_T_2 = _productMult_T + _GEN_20; // @[Multiplier.scala 71:38]
+  wire [130:0] _productMult_T = {carry, 1'h0}; // @[Multiplier.scala 70:25]
+  wire [130:0] _GEN_19 = {{1'd0}, sum}; // @[Multiplier.scala 70:38]
+  wire [130:0] _productMult_T_2 = _productMult_T + _GEN_19; // @[Multiplier.scala 70:38]
   wire [64:0] compressor32Out_ca_value = compressor32Out_compressor32_io_ca; // @[Compressor32.scala 49:50 51:31]
-  wire [65:0] _productMultAdd_T = {compressor32Out_ca_value, 1'h0}; // @[Multiplier.scala 72:47]
+  wire [65:0] _productMultAdd_T = {compressor32Out_ca_value, 1'h0}; // @[Multiplier.scala 71:47]
   wire [64:0] compressor32Out_s_value = compressor32Out_compressor32_io_s; // @[Compressor32.scala 49:50 50:30]
-  wire [65:0] _GEN_21 = {{1'd0}, compressor32Out_s_value}; // @[Multiplier.scala 72:60]
-  wire [65:0] _productMultAdd_T_2 = _productMultAdd_T + _GEN_21; // @[Multiplier.scala 72:60]
-  wire [129:0] productMult = _productMult_T_2[129:0]; // @[Multiplier.scala 69:31 71:15]
-  wire [63:0] productMultAdd = _productMultAdd_T_2[63:0]; // @[Multiplier.scala 70:34 72:18]
+  wire [65:0] _GEN_20 = {{1'd0}, compressor32Out_s_value}; // @[Multiplier.scala 71:60]
+  wire [65:0] _productMultAdd_T_2 = _productMultAdd_T + _GEN_20; // @[Multiplier.scala 71:60]
+  wire [129:0] productMult = _productMult_T_2[129:0]; // @[Multiplier.scala 68:31 70:15]
+  wire [63:0] productMultAdd = _productMultAdd_T_2[63:0]; // @[Multiplier.scala 69:34 71:18]
   wire [74:0] compressorOutLast_outs_ca_value = compressorOutLast_outs_compressor42_io_ca; // @[Compressor42.scala 57:50 59:31]
   wire [74:0] compressorOutLast_outs_1_s_value = compressorOutLast_outs_compressor42_1_io_s; // @[Compressor42.scala 57:50 58:30]
   wire [74:0] compressorOutLast_outs_3_ca_value = compressorOutLast_outs_compressor42_3_io_ca; // @[Compressor42.scala 57:50 59:31]
   wire [74:0] compressorOutLast_outs_4_s_value = compressorOutLast_outs_compressor42_4_io_s; // @[Compressor42.scala 57:50 58:30]
   wire [74:0] compressorOutLast_outs_6_ca_value = compressorOutLast_outs_compressor42_6_io_ca; // @[Compressor42.scala 57:50 59:31]
   wire [70:0] compressorOutLast_outs_7_s_value = compressorOutLast_outs_compressor42_7_io_s; // @[Compressor42.scala 57:50 58:30]
-  wire [85:0] compressorOutLast_outs_14_s_value = compressorOutLast_outs_compressor32_6_io_s; // @[Compressor32.scala 49:50 50:30]
-  wire [97:0] compressorOutLast_outs_16_ca_value = compressorOutLast_outs_compressor32_8_io_ca; // @[Compressor32.scala 49:50 51:31]
-  wire [87:0] compressorOutLast_outs_17_s_value = compressorOutLast_outs_compressor32_9_io_s; // @[Compressor32.scala 49:50 50:30]
-  wire [120:0] compressorOutLast_outs_19_ca_value = compressorOutLast_outs_compressor32_11_io_ca; // @[Compressor32.scala 49:50 51:31]
-  wire [103:0] compressorOutLast_outs_20_s_value = compressorOutLast_outs_compressor32_12_io_s; // @[Compressor32.scala 49:50 50:30]
+  wire [92:0] compressorOutLast_outs_15_ca_value = compressorOutLast_outs_compressor42_9_io_ca; // @[Compressor42.scala 57:50 59:31]
+  wire [88:0] compressorOutLast_outs_16_s_value = compressorOutLast_outs_compressor42_10_io_s; // @[Compressor42.scala 57:50 58:30]
+  wire [112:0] compressorOutLast_outs_18_s_value = compressorOutLast_outs_compressor32_7_io_s; // @[Compressor32.scala 49:50 50:30]
   BoothCodeUnit boothCodeOutput_boothCodeUnit ( // @[BoothCode.scala 66:31]
     .io_A(boothCodeOutput_boothCodeUnit_io_A),
     .io_code(boothCodeOutput_boothCodeUnit_io_code),
@@ -1209,6 +1180,30 @@ module Multiplier33(
     .io_s(compressorOutLast_outs_compressor32_5_io_s),
     .io_ca(compressorOutLast_outs_compressor32_5_io_ca)
   );
+  Compressor42_8 compressorOutLast_outs_compressor42_8 ( // @[Compressor42.scala 50:44]
+    .io_p_0(compressorOutLast_outs_compressor42_8_io_p_0),
+    .io_p_1(compressorOutLast_outs_compressor42_8_io_p_1),
+    .io_p_2(compressorOutLast_outs_compressor42_8_io_p_2),
+    .io_p_3(compressorOutLast_outs_compressor42_8_io_p_3),
+    .io_s(compressorOutLast_outs_compressor42_8_io_s),
+    .io_ca(compressorOutLast_outs_compressor42_8_io_ca)
+  );
+  Compressor42_9 compressorOutLast_outs_compressor42_9 ( // @[Compressor42.scala 50:44]
+    .io_p_0(compressorOutLast_outs_compressor42_9_io_p_0),
+    .io_p_1(compressorOutLast_outs_compressor42_9_io_p_1),
+    .io_p_2(compressorOutLast_outs_compressor42_9_io_p_2),
+    .io_p_3(compressorOutLast_outs_compressor42_9_io_p_3),
+    .io_s(compressorOutLast_outs_compressor42_9_io_s),
+    .io_ca(compressorOutLast_outs_compressor42_9_io_ca)
+  );
+  Compressor42_10 compressorOutLast_outs_compressor42_10 ( // @[Compressor42.scala 50:44]
+    .io_p_0(compressorOutLast_outs_compressor42_10_io_p_0),
+    .io_p_1(compressorOutLast_outs_compressor42_10_io_p_1),
+    .io_p_2(compressorOutLast_outs_compressor42_10_io_p_2),
+    .io_p_3(compressorOutLast_outs_compressor42_10_io_p_3),
+    .io_s(compressorOutLast_outs_compressor42_10_io_s),
+    .io_ca(compressorOutLast_outs_compressor42_10_io_ca)
+  );
   Compressor32_6 compressorOutLast_outs_compressor32_6 ( // @[Compressor32.scala 42:44]
     .io_in_0(compressorOutLast_outs_compressor32_6_io_in_0),
     .io_in_1(compressorOutLast_outs_compressor32_6_io_in_1),
@@ -1223,136 +1218,94 @@ module Multiplier33(
     .io_s(compressorOutLast_outs_compressor32_7_io_s),
     .io_ca(compressorOutLast_outs_compressor32_7_io_ca)
   );
-  Compressor32_7 compressorOutLast_outs_compressor32_8 ( // @[Compressor32.scala 42:44]
+  Compressor42_11 compressorOutLast_outs_compressor42_11 ( // @[Compressor42.scala 50:44]
+    .io_p_0(compressorOutLast_outs_compressor42_11_io_p_0),
+    .io_p_1(compressorOutLast_outs_compressor42_11_io_p_1),
+    .io_p_2(compressorOutLast_outs_compressor42_11_io_p_2),
+    .io_p_3(compressorOutLast_outs_compressor42_11_io_p_3),
+    .io_s(compressorOutLast_outs_compressor42_11_io_s),
+    .io_ca(compressorOutLast_outs_compressor42_11_io_ca)
+  );
+  Compressor32_8 compressorOutLast_outs_compressor32_8 ( // @[Compressor32.scala 42:44]
     .io_in_0(compressorOutLast_outs_compressor32_8_io_in_0),
     .io_in_1(compressorOutLast_outs_compressor32_8_io_in_1),
     .io_in_2(compressorOutLast_outs_compressor32_8_io_in_2),
     .io_s(compressorOutLast_outs_compressor32_8_io_s),
     .io_ca(compressorOutLast_outs_compressor32_8_io_ca)
   );
-  Compressor32_9 compressorOutLast_outs_compressor32_9 ( // @[Compressor32.scala 42:44]
-    .io_in_0(compressorOutLast_outs_compressor32_9_io_in_0),
-    .io_in_1(compressorOutLast_outs_compressor32_9_io_in_1),
-    .io_in_2(compressorOutLast_outs_compressor32_9_io_in_2),
-    .io_s(compressorOutLast_outs_compressor32_9_io_s),
-    .io_ca(compressorOutLast_outs_compressor32_9_io_ca)
-  );
-  Compressor32_10 compressorOutLast_outs_compressor32_10 ( // @[Compressor32.scala 42:44]
-    .io_in_0(compressorOutLast_outs_compressor32_10_io_in_0),
-    .io_in_1(compressorOutLast_outs_compressor32_10_io_in_1),
-    .io_in_2(compressorOutLast_outs_compressor32_10_io_in_2),
-    .io_s(compressorOutLast_outs_compressor32_10_io_s),
-    .io_ca(compressorOutLast_outs_compressor32_10_io_ca)
-  );
-  Compressor32_11 compressorOutLast_outs_compressor32_11 ( // @[Compressor32.scala 42:44]
-    .io_in_0(compressorOutLast_outs_compressor32_11_io_in_0),
-    .io_in_1(compressorOutLast_outs_compressor32_11_io_in_1),
-    .io_in_2(compressorOutLast_outs_compressor32_11_io_in_2),
-    .io_s(compressorOutLast_outs_compressor32_11_io_s),
-    .io_ca(compressorOutLast_outs_compressor32_11_io_ca)
-  );
-  Compressor32_12 compressorOutLast_outs_compressor32_12 ( // @[Compressor32.scala 42:44]
-    .io_in_0(compressorOutLast_outs_compressor32_12_io_in_0),
-    .io_in_1(compressorOutLast_outs_compressor32_12_io_in_1),
-    .io_in_2(compressorOutLast_outs_compressor32_12_io_in_2),
-    .io_s(compressorOutLast_outs_compressor32_12_io_s),
-    .io_ca(compressorOutLast_outs_compressor32_12_io_ca)
-  );
-  Compressor32_13 compressorOutLast_outs_compressor32_13 ( // @[Compressor32.scala 42:44]
-    .io_in_0(compressorOutLast_outs_compressor32_13_io_in_0),
-    .io_in_1(compressorOutLast_outs_compressor32_13_io_in_1),
-    .io_in_2(compressorOutLast_outs_compressor32_13_io_in_2),
-    .io_s(compressorOutLast_outs_compressor32_13_io_s),
-    .io_ca(compressorOutLast_outs_compressor32_13_io_ca)
-  );
-  Compressor32_14 compressorOutLast_outs_compressor32_14 ( // @[Compressor32.scala 42:44]
-    .io_in_0(compressorOutLast_outs_compressor32_14_io_in_0),
-    .io_in_1(compressorOutLast_outs_compressor32_14_io_in_1),
-    .io_in_2(compressorOutLast_outs_compressor32_14_io_in_2),
-    .io_s(compressorOutLast_outs_compressor32_14_io_s),
-    .io_ca(compressorOutLast_outs_compressor32_14_io_ca)
-  );
-  Compressor42_8 compressorOutLast_outs_compressor42_8 ( // @[Compressor42.scala 50:44]
-    .io_p_0(compressorOutLast_outs_compressor42_8_io_p_0),
-    .io_p_1(compressorOutLast_outs_compressor42_8_io_p_1),
-    .io_p_2(compressorOutLast_outs_compressor42_8_io_p_2),
-    .io_p_3(compressorOutLast_outs_compressor42_8_io_p_3),
-    .io_s(compressorOutLast_outs_compressor42_8_io_s),
-    .io_ca(compressorOutLast_outs_compressor42_8_io_ca)
-  );
-  Compressor32_15 compressor32Out_compressor32 ( // @[Compressor32.scala 42:44]
+  Compressor32_9 compressor32Out_compressor32 ( // @[Compressor32.scala 42:44]
     .io_in_0(compressor32Out_compressor32_io_in_0),
     .io_in_1(compressor32Out_compressor32_io_in_1),
     .io_in_2(compressor32Out_compressor32_io_in_2),
     .io_s(compressor32Out_compressor32_io_s),
     .io_ca(compressor32Out_compressor32_io_ca)
   );
-  assign io_product = {productMult[129:64],productMultAdd}; // @[Multiplier.scala 74:67]
-  assign boothCodeOutput_boothCodeUnit_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign io_product = {productMult[129:64],productMultAdd}; // @[Multiplier.scala 73:67]
+  assign boothCodeOutput_boothCodeUnit_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_io_code = {_boothCodeOutput_T[1:0],1'h0}; // @[Cat.scala 31:58]
-  assign boothCodeOutput_boothCodeUnit_1_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_1_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_1_io_code = _boothCodeOutput_T[3:1]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_2_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_2_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_2_io_code = _boothCodeOutput_T[5:3]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_3_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_3_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_3_io_code = _boothCodeOutput_T[7:5]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_4_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_4_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_4_io_code = _boothCodeOutput_T[9:7]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_5_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_5_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_5_io_code = _boothCodeOutput_T[11:9]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_6_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_6_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_6_io_code = _boothCodeOutput_T[13:11]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_7_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_7_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_7_io_code = _boothCodeOutput_T[15:13]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_8_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_8_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_8_io_code = _boothCodeOutput_T[17:15]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_9_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_9_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_9_io_code = _boothCodeOutput_T[19:17]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_10_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_10_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_10_io_code = _boothCodeOutput_T[21:19]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_11_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_11_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_11_io_code = _boothCodeOutput_T[23:21]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_12_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_12_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_12_io_code = _boothCodeOutput_T[25:23]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_13_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_13_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_13_io_code = _boothCodeOutput_T[27:25]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_14_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_14_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_14_io_code = _boothCodeOutput_T[29:27]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_15_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_15_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_15_io_code = _boothCodeOutput_T[31:29]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_16_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_16_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_16_io_code = _boothCodeOutput_T[33:31]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_17_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_17_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_17_io_code = _boothCodeOutput_T[35:33]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_18_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_18_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_18_io_code = _boothCodeOutput_T[37:35]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_19_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_19_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_19_io_code = _boothCodeOutput_T[39:37]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_20_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_20_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_20_io_code = _boothCodeOutput_T[41:39]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_21_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_21_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_21_io_code = _boothCodeOutput_T[43:41]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_22_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_22_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_22_io_code = _boothCodeOutput_T[45:43]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_23_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_23_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_23_io_code = _boothCodeOutput_T[47:45]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_24_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_24_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_24_io_code = _boothCodeOutput_T[49:47]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_25_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_25_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_25_io_code = _boothCodeOutput_T[51:49]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_26_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_26_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_26_io_code = _boothCodeOutput_T[53:51]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_27_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_27_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_27_io_code = _boothCodeOutput_T[55:53]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_28_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_28_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_28_io_code = _boothCodeOutput_T[57:55]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_29_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_29_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_29_io_code = _boothCodeOutput_T[59:57]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_30_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_30_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_30_io_code = _boothCodeOutput_T[61:59]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_31_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_31_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_31_io_code = _boothCodeOutput_T[63:61]; // @[BoothCode.scala 87:78]
-  assign boothCodeOutput_boothCodeUnit_32_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 22:20 23:22 25:22]
+  assign boothCodeOutput_boothCodeUnit_32_io_A = io_sub_vld ? _multiplicand_not_T_2 : io_multiplicand; // @[Multiplier.scala 21:20 22:22 24:22]
   assign boothCodeOutput_boothCodeUnit_32_io_code = {_boothCodeOutput_T[64],_boothCodeOutput_T[64:63]}; // @[Cat.scala 31:58]
   assign compressorOutLast_outs_compressor42_io_p_0 = {{6'd0}, partProducts_pProduct_27_value}; // @[Compressor42.scala 53:50]
   assign compressorOutLast_outs_compressor42_io_p_1 = {{4'd0}, _compressorOutLast_outs_compressor42_io_p_1_T_1}; // @[Compressor42.scala 54:33]
@@ -1382,7 +1335,7 @@ module Multiplier33(
   assign compressorOutLast_outs_compressor42_6_io_p_1 = {{4'd0}, _compressorOutLast_outs_compressor42_io_p_1_T_13}; // @[Compressor42.scala 54:33]
   assign compressorOutLast_outs_compressor42_6_io_p_2 = {{2'd0}, _compressorOutLast_outs_compressor42_io_p_2_T_13}; // @[Compressor42.scala 54:33]
   assign compressorOutLast_outs_compressor42_6_io_p_3 = {partProducts_pProduct_6_value,6'h0}; // @[Cat.scala 31:58]
-  assign compressorOutLast_outs_compressor42_7_io_p_0 = {{5'd0}, partProducts_34_value}; // @[Compressor42.scala 53:50]
+  assign compressorOutLast_outs_compressor42_7_io_p_0 = {{4'd0}, partProducts_34_value}; // @[Compressor42.scala 53:50]
   assign compressorOutLast_outs_compressor42_7_io_p_1 = {{2'd0}, partProducts_pProduct_0_value}; // @[Compressor42.scala 53:50]
   assign compressorOutLast_outs_compressor42_7_io_p_2 = {{2'd0}, partProducts_pProduct_1_value}; // @[Compressor42.scala 53:50]
   assign compressorOutLast_outs_compressor42_7_io_p_3 = {partProducts_pProduct_2_value,2'h0}; // @[Cat.scala 31:58]
@@ -1404,37 +1357,31 @@ module Multiplier33(
   assign compressorOutLast_outs_compressor32_5_io_in_0 = {{8'd0}, compressorOutLast_outs_7_s_value}; // @[Compressor32.scala 45:51]
   assign compressorOutLast_outs_compressor32_5_io_in_1 = {{7'd0}, _compressorOutLast_outs_compressor32_io_in_1_T_8}; // @[Compressor32.scala 46:34]
   assign compressorOutLast_outs_compressor32_5_io_in_2 = {compressorOutLast_outs_6_s_value,4'h0}; // @[Cat.scala 31:58]
-  assign compressorOutLast_outs_compressor32_6_io_in_0 = {{3'd0}, compressorOutLast_regC_9}; // @[Compressor32.scala 45:51]
-  assign compressorOutLast_outs_compressor32_6_io_in_1 = {{1'd0}, _compressorOutLast_outs_compressor32_io_in_1_T_10}; // @[Compressor32.scala 46:34]
-  assign compressorOutLast_outs_compressor32_6_io_in_2 = {compressorOutLast_regC_11,9'h0}; // @[Cat.scala 31:58]
-  assign compressorOutLast_outs_compressor32_7_io_in_0 = {{15'd0}, compressorOutLast_regC_6}; // @[Compressor32.scala 45:51]
-  assign compressorOutLast_outs_compressor32_7_io_in_1 = {{14'd0}, _compressorOutLast_outs_compressor32_io_in_1_T_11}; // @[Compressor32.scala 46:34]
-  assign compressorOutLast_outs_compressor32_7_io_in_2 = {compressorOutLast_regC_8,15'h0}; // @[Cat.scala 31:58]
-  assign compressorOutLast_outs_compressor32_8_io_in_0 = {{15'd0}, compressorOutLast_regC_3}; // @[Compressor32.scala 45:51]
-  assign compressorOutLast_outs_compressor32_8_io_in_1 = {{1'd0}, _compressorOutLast_outs_compressor32_io_in_1_T_13}; // @[Compressor32.scala 46:34]
-  assign compressorOutLast_outs_compressor32_8_io_in_2 = {compressorOutLast_regC_5,15'h0}; // @[Cat.scala 31:58]
-  assign compressorOutLast_outs_compressor32_9_io_in_0 = {{9'd0}, compressorOutLast_regC}; // @[Compressor32.scala 45:51]
-  assign compressorOutLast_outs_compressor32_9_io_in_1 = {{8'd0}, _compressorOutLast_outs_compressor32_io_in_1_T_14}; // @[Compressor32.scala 46:34]
-  assign compressorOutLast_outs_compressor32_9_io_in_2 = {compressorOutLast_regC_2,5'h0}; // @[Cat.scala 31:58]
-  assign compressorOutLast_outs_compressor32_10_io_in_0 = {{2'd0}, _compressorOutLast_outs_compressor32_io_in_0_T_1}; // @[Compressor32.scala 46:34]
-  assign compressorOutLast_outs_compressor32_10_io_in_1 = {{1'd0}, compressorOutLast_outs_14_s_value}; // @[Compressor32.scala 45:51]
-  assign compressorOutLast_outs_compressor32_10_io_in_2 = {compressorOutLast_outs_14_ca_value,1'h0}; // @[Cat.scala 31:58]
-  assign compressorOutLast_outs_compressor32_11_io_in_0 = {{23'd0}, compressorOutLast_outs_16_ca_value}; // @[Compressor32.scala 45:51]
-  assign compressorOutLast_outs_compressor32_11_io_in_1 = {{1'd0}, _compressorOutLast_outs_compressor32_io_in_1_T_16}; // @[Compressor32.scala 46:34]
-  assign compressorOutLast_outs_compressor32_11_io_in_2 = {compressorOutLast_outs_15_ca_value,23'h0}; // @[Cat.scala 31:58]
-  assign compressorOutLast_outs_compressor32_12_io_in_0 = {{16'd0}, compressorOutLast_outs_17_s_value}; // @[Compressor32.scala 45:51]
-  assign compressorOutLast_outs_compressor32_12_io_in_1 = {{15'd0}, _compressorOutLast_outs_compressor32_io_in_1_T_17}; // @[Compressor32.scala 46:34]
-  assign compressorOutLast_outs_compressor32_12_io_in_2 = {compressorOutLast_outs_16_s_value,6'h0}; // @[Cat.scala 31:58]
-  assign compressorOutLast_outs_compressor32_13_io_in_0 = {{4'd0}, compressorOutLast_outs_19_ca_value}; // @[Compressor32.scala 45:51]
-  assign compressorOutLast_outs_compressor32_13_io_in_1 = {{1'd0}, _compressorOutLast_outs_compressor32_io_in_1_T_19}; // @[Compressor32.scala 46:34]
-  assign compressorOutLast_outs_compressor32_13_io_in_2 = {compressorOutLast_outs_18_ca_value,38'h0}; // @[Cat.scala 31:58]
-  assign compressorOutLast_outs_compressor32_14_io_in_0 = {{24'd0}, compressorOutLast_outs_20_s_value}; // @[Compressor32.scala 45:51]
-  assign compressorOutLast_outs_compressor32_14_io_in_1 = {{23'd0}, _compressorOutLast_outs_compressor32_io_in_1_T_20}; // @[Compressor32.scala 46:34]
-  assign compressorOutLast_outs_compressor32_14_io_in_2 = {compressorOutLast_outs_19_s_value,7'h0}; // @[Cat.scala 31:58]
-  assign compressorOutLast_outs_compressor42_8_io_p_0 = {{6'd0}, compressorOutLast_regC_13}; // @[Compressor42.scala 53:50]
-  assign compressorOutLast_outs_compressor42_8_io_p_1 = {{5'd0}, _compressorOutLast_outs_compressor42_io_p_1_T_14}; // @[Compressor42.scala 54:33]
+  assign compressorOutLast_outs_compressor42_8_io_p_0 = {{4'd0}, compressorOutLast_regC_8}; // @[Compressor42.scala 53:50]
+  assign compressorOutLast_outs_compressor42_8_io_p_1 = {{3'd0}, _compressorOutLast_outs_compressor42_io_p_1_T_14}; // @[Compressor42.scala 54:33]
   assign compressorOutLast_outs_compressor42_8_io_p_2 = {{1'd0}, _compressorOutLast_outs_compressor42_io_p_2_T_15}; // @[Compressor42.scala 54:33]
-  assign compressorOutLast_outs_compressor42_8_io_p_3 = {compressorOutLast_regC_16,9'h0}; // @[Cat.scala 31:58]
+  assign compressorOutLast_outs_compressor42_8_io_p_3 = {compressorOutLast_regC_11,10'h0}; // @[Cat.scala 31:58]
+  assign compressorOutLast_outs_compressor42_9_io_p_0 = {{10'd0}, compressorOutLast_regC_4}; // @[Compressor42.scala 53:50]
+  assign compressorOutLast_outs_compressor42_9_io_p_1 = {{9'd0}, _compressorOutLast_outs_compressor42_io_p_1_T_15}; // @[Compressor42.scala 54:33]
+  assign compressorOutLast_outs_compressor42_9_io_p_2 = {{1'd0}, _compressorOutLast_outs_compressor42_io_p_2_T_17}; // @[Compressor42.scala 54:33]
+  assign compressorOutLast_outs_compressor42_9_io_p_3 = {compressorOutLast_regC_7,10'h0}; // @[Cat.scala 31:58]
+  assign compressorOutLast_outs_compressor42_10_io_p_0 = {{10'd0}, compressorOutLast_regC}; // @[Compressor42.scala 53:50]
+  assign compressorOutLast_outs_compressor42_10_io_p_1 = {{9'd0}, _compressorOutLast_outs_compressor42_io_p_1_T_16}; // @[Compressor42.scala 54:33]
+  assign compressorOutLast_outs_compressor42_10_io_p_2 = {{1'd0}, _compressorOutLast_outs_compressor42_io_p_2_T_19}; // @[Compressor42.scala 54:33]
+  assign compressorOutLast_outs_compressor42_10_io_p_3 = {compressorOutLast_regC_3,6'h0}; // @[Cat.scala 31:58]
+  assign compressorOutLast_outs_compressor32_6_io_in_0 = {{18'd0}, compressorOutLast_outs_15_ca_value}; // @[Compressor32.scala 45:51]
+  assign compressorOutLast_outs_compressor32_6_io_in_1 = {{1'd0}, _compressorOutLast_outs_compressor32_io_in_1_T_10}; // @[Compressor32.scala 46:34]
+  assign compressorOutLast_outs_compressor32_6_io_in_2 = {compressorOutLast_outs_14_ca_value,24'h0}; // @[Cat.scala 31:58]
+  assign compressorOutLast_outs_compressor32_7_io_in_0 = {{24'd0}, compressorOutLast_outs_16_s_value}; // @[Compressor32.scala 45:51]
+  assign compressorOutLast_outs_compressor32_7_io_in_1 = {{23'd0}, _compressorOutLast_outs_compressor32_io_in_1_T_11}; // @[Compressor32.scala 46:34]
+  assign compressorOutLast_outs_compressor32_7_io_in_2 = {compressorOutLast_outs_15_s_value,20'h0}; // @[Cat.scala 31:58]
+  assign compressorOutLast_outs_compressor42_11_io_p_0 = {{20'd0}, compressorOutLast_outs_18_s_value}; // @[Compressor42.scala 53:50]
+  assign compressorOutLast_outs_compressor42_11_io_p_1 = {{19'd0}, _compressorOutLast_outs_compressor42_io_p_1_T_17}; // @[Compressor42.scala 54:33]
+  assign compressorOutLast_outs_compressor42_11_io_p_2 = {{1'd0}, _compressorOutLast_outs_compressor42_io_p_2_T_21}; // @[Compressor42.scala 54:33]
+  assign compressorOutLast_outs_compressor42_11_io_p_3 = {compressorOutLast_outs_17_ca_value,22'h0}; // @[Cat.scala 31:58]
+  assign compressorOutLast_outs_compressor32_8_io_in_0 = {{4'd0}, _compressorOutLast_outs_compressor32_io_in_0_T_1}; // @[Compressor32.scala 46:34]
+  assign compressorOutLast_outs_compressor32_8_io_in_1 = {{1'd0}, compressorOutLast_regC_13}; // @[Compressor32.scala 45:51]
+  assign compressorOutLast_outs_compressor32_8_io_in_2 = {compressorOutLast_regC_14,1'h0}; // @[Cat.scala 31:58]
   assign compressor32Out_compressor32_io_in_0 = {{1'd0}, compressor32Out_compressor32In_0_value}; // @[Compressor32.scala 45:51]
   assign compressor32Out_compressor32_io_in_1 = {{1'd0}, compressor32Out_compressor32In_2_value}; // @[Compressor32.scala 45:51]
   assign compressor32Out_compressor32_io_in_2 = {compressor32Out_compressor32In_1_value,1'h0}; // @[Cat.scala 31:58]
@@ -1505,24 +1452,19 @@ module Multiplier33(
       compressorOutLast_regC_12 <= partProducts_33_value; // @[Compressor.scala 112:18]
     end
     if (reset) begin // @[Compressor.scala 109:29]
-      compressorOutLast_regC_13 <= 128'h0; // @[Compressor.scala 109:29]
+      compressorOutLast_regC_13 <= 133'h0; // @[Compressor.scala 109:29]
     end else if (io_down_1) begin // @[Compressor.scala 111:28]
-      compressorOutLast_regC_13 <= compressorOutLast_outs_22_s_value; // @[Compressor.scala 112:18]
+      compressorOutLast_regC_13 <= compressorOutLast_outs_19_s_value; // @[Compressor.scala 112:18]
     end
     if (reset) begin // @[Compressor.scala 109:29]
-      compressorOutLast_regC_14 <= 128'h0; // @[Compressor.scala 109:29]
+      compressorOutLast_regC_14 <= 133'h0; // @[Compressor.scala 109:29]
     end else if (io_down_1) begin // @[Compressor.scala 111:28]
-      compressorOutLast_regC_14 <= compressorOutLast_outs_22_ca_value; // @[Compressor.scala 112:18]
+      compressorOutLast_regC_14 <= compressorOutLast_outs_19_ca_value; // @[Compressor.scala 112:18]
     end
     if (reset) begin // @[Compressor.scala 109:29]
-      compressorOutLast_regC_15 <= 125'h0; // @[Compressor.scala 109:29]
+      compressorOutLast_regC_15 <= 66'h0; // @[Compressor.scala 109:29]
     end else if (io_down_1) begin // @[Compressor.scala 111:28]
-      compressorOutLast_regC_15 <= compressorOutLast_outs_21_s_value; // @[Compressor.scala 112:18]
-    end
-    if (reset) begin // @[Compressor.scala 109:29]
-      compressorOutLast_regC_16 <= 125'h0; // @[Compressor.scala 109:29]
-    end else if (io_down_1) begin // @[Compressor.scala 111:28]
-      compressorOutLast_regC_16 <= compressorOutLast_outs_21_ca_value; // @[Compressor.scala 112:18]
+      compressorOutLast_regC_15 <= compressorOutLast_regC_12; // @[Compressor.scala 112:18]
     end
   end
 // Register and memory initialization
@@ -1587,14 +1529,12 @@ initial begin
   compressorOutLast_regC_11 = _RAND_11[76:0];
   _RAND_12 = {3{`RANDOM}};
   compressorOutLast_regC_12 = _RAND_12[65:0];
-  _RAND_13 = {4{`RANDOM}};
-  compressorOutLast_regC_13 = _RAND_13[127:0];
-  _RAND_14 = {4{`RANDOM}};
-  compressorOutLast_regC_14 = _RAND_14[127:0];
-  _RAND_15 = {4{`RANDOM}};
-  compressorOutLast_regC_15 = _RAND_15[124:0];
-  _RAND_16 = {4{`RANDOM}};
-  compressorOutLast_regC_16 = _RAND_16[124:0];
+  _RAND_13 = {5{`RANDOM}};
+  compressorOutLast_regC_13 = _RAND_13[132:0];
+  _RAND_14 = {5{`RANDOM}};
+  compressorOutLast_regC_14 = _RAND_14[132:0];
+  _RAND_15 = {3{`RANDOM}};
+  compressorOutLast_regC_15 = _RAND_15[65:0];
 `endif // RANDOMIZE_REG_INIT
   `endif // RANDOMIZE
 end // initial

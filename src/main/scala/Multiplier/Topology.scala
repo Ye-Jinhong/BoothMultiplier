@@ -10,7 +10,7 @@ trait BaseData {
   val ppNum: Int = n + 2
   // If you want to use Auto Generation
   // Please use `ture` to replace `false`
-  val autoGenArray: Boolean = false
+  val autoGenArray: Boolean = true
 }
 
 trait Customize extends BaseData{
@@ -60,7 +60,7 @@ trait Customize extends BaseData{
     Seq(31),
     Seq(32))
 
-  val cTypesCustom: Seq[Int] = Seq(3, 3, 3, 3, 3, 3, 3)
+  val cTypesCustom: Seq[Int] = Seq(4, 4, 4, 4, 4, 4)
 }
 
 trait Topology extends Customize {

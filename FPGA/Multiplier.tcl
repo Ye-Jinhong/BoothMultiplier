@@ -24,70 +24,7 @@
 #    (Please see the '$orig_proj_dir' and '$origin_dir' variable setting below at the start of the script)
 #
 #    "./src/ip/clk_wiz_0/clk_wiz_0.xci"
-#    "./src/imports/verilog/Multiplier34.v"
-#    "./src/imports/verilog/Multiplier36.v"
-#    "./src/imports/verilog/Multiplier40.v"
-#    "./src/imports/verilog/Multiplier47.v"
-#    "./src/imports/verilog/Multiplier48.v"
-#    "./src/imports/verilog/Multiplier50.v"
-#    "./src/imports/verilog/Multiplier60.v"
-#    "./src/imports/verilog/Multiplier63.v"
-#    "./src/imports/verilog/Multiplier9.v"
-#    "./src/imports/verilog/Multiplier61.v"
-#    "./src/imports/verilog/Multiplier21.v"
-#    "./src/imports/verilog/Multiplier42.v"
-#    "./src/imports/verilog/Multiplier23.v"
-#    "./src/imports/verilog/Multiplier44.v"
-#    "./src/imports/verilog/Multiplier25.v"
-#    "./src/imports/verilog/Multiplier46.v"
-#    "./src/imports/verilog/Multiplier27.v"
-#    "./src/imports/verilog/Multiplier29.v"
-#    "./src/imports/verilog/Multiplier3.v"
-#    "./src/imports/verilog/Multiplier1.v"
-#    "./src/imports/verilog/Multiplier7.v"
-#    "./src/imports/verilog/Multiplier10.v"
-#    "./src/imports/verilog/Multiplier52.v"
-#    "./src/imports/verilog/Multiplier5.v"
-#    "./src/imports/verilog/Multiplier31.v"
-#    "./src/imports/verilog/Multiplier54.v"
-#    "./src/imports/verilog/Multiplier14.v"
-#    "./src/imports/verilog/Multiplier33.v"
-#    "./src/imports/verilog/Multiplier56.v"
-#    "./src/imports/verilog/Multiplier12.v"
-#    "./src/imports/verilog/Multiplier35.v"
-#    "./src/imports/verilog/Multiplier58.v"
-#    "./src/imports/verilog/Multiplier18.v"
-#    "./src/imports/verilog/Multiplier37.v"
-#    "./src/imports/verilog/Multiplier16.v"
-#    "./src/imports/verilog/Multiplier39.v"
-#    "./src/imports/verilog/Multiplier41.v"
-#    "./src/imports/verilog/Multiplier20.v"
-#    "./src/imports/verilog/Multiplier43.v"
-#    "./src/imports/verilog/Multiplier22.v"
-#    "./src/imports/verilog/Multiplier45.v"
-#    "./src/imports/verilog/Multiplier24.v"
-#    "./src/imports/verilog/Multiplier62.v"
-#    "./src/imports/verilog/Multiplier26.v"
-#    "./src/imports/verilog/Multiplier49.v"
-#    "./src/imports/verilog/Multiplier28.v"
-#    "./src/imports/verilog/Multiplier2.v"
-#    "./src/imports/verilog/Multiplier0.v"
-#    "./src/imports/verilog/Multiplier30.v"
-#    "./src/imports/verilog/Multiplier51.v"
-#    "./src/imports/verilog/Multiplier6.v"
-#    "./src/imports/verilog/Multiplier32.v"
-#    "./src/imports/verilog/Multiplier53.v"
-#    "./src/imports/verilog/Multiplier4.v"
-#    "./src/imports/verilog/Multiplier13.v"
-#    "./src/imports/verilog/Multiplier55.v"
-#    "./src/imports/verilog/Multiplier11.v"
-#    "./src/imports/verilog/Multiplier57.v"
-#    "./src/imports/verilog/Multiplier8.v"
-#    "./src/imports/verilog/Multiplier17.v"
-#    "./src/imports/verilog/Multiplier38.v"
-#    "./src/imports/verilog/Multiplier59.v"
-#    "./src/imports/verilog/Multiplier15.v"
-#    "./src/imports/verilog/Multiplier19.v"
+#    "./src/imports/verilog/*.v"
 #    "C:/ChiselProject/BoothMultiplier/FPGA/Multiplier/Multiplier.srcs/constrs_1/imports/src/VC707_rev_2.0.ucf.xdc"
 #
 # 3. The following remote source files that were added to the original project:-
@@ -101,70 +38,7 @@ proc checkRequiredFiles { origin_dir} {
   set status true
   set files [list \
    "./src/ip/clk_wiz_0/clk_wiz_0.xci" \
-   "./src/verilog/Multiplier34.v" \
-   "./src/verilog/Multiplier36.v" \
-   "./src/verilog/Multiplier40.v" \
-   "./src/verilog/Multiplier47.v" \
-   "./src/verilog/Multiplier48.v" \
-   "./src/verilog/Multiplier50.v" \
-   "./src/verilog/Multiplier60.v" \
-   "./src/verilog/Multiplier63.v" \
-   "./src/verilog/Multiplier9.v" \
-   "./src/verilog/Multiplier61.v" \
-   "./src/verilog/Multiplier21.v" \
-   "./src/verilog/Multiplier42.v" \
-   "./src/verilog/Multiplier23.v" \
-   "./src/verilog/Multiplier44.v" \
-   "./src/verilog/Multiplier25.v" \
-   "./src/verilog/Multiplier46.v" \
-   "./src/verilog/Multiplier27.v" \
-   "./src/verilog/Multiplier29.v" \
-   "./src/verilog/Multiplier3.v" \
-   "./src/verilog/Multiplier1.v" \
-   "./src/verilog/Multiplier7.v" \
-   "./src/verilog/Multiplier10.v" \
-   "./src/verilog/Multiplier52.v" \
-   "./src/verilog/Multiplier5.v" \
-   "./src/verilog/Multiplier31.v" \
-   "./src/verilog/Multiplier54.v" \
-   "./src/verilog/Multiplier14.v" \
-   "./src/verilog/Multiplier33.v" \
-   "./src/verilog/Multiplier56.v" \
-   "./src/verilog/Multiplier12.v" \
-   "./src/verilog/Multiplier35.v" \
-   "./src/verilog/Multiplier58.v" \
-   "./src/verilog/Multiplier18.v" \
-   "./src/verilog/Multiplier37.v" \
-   "./src/verilog/Multiplier16.v" \
-   "./src/verilog/Multiplier39.v" \
-   "./src/verilog/Multiplier41.v" \
-   "./src/verilog/Multiplier20.v" \
-   "./src/verilog/Multiplier43.v" \
-   "./src/verilog/Multiplier22.v" \
-   "./src/verilog/Multiplier45.v" \
-   "./src/verilog/Multiplier24.v" \
-   "./src/verilog/Multiplier62.v" \
-   "./src/verilog/Multiplier26.v" \
-   "./src/verilog/Multiplier49.v" \
-   "./src/verilog/Multiplier28.v" \
-   "./src/verilog/Multiplier2.v" \
-   "./src/verilog/Multiplier0.v" \
-   "./src/verilog/Multiplier30.v" \
-   "./src/verilog/Multiplier51.v" \
-   "./src/verilog/Multiplier6.v" \
-   "./src/verilog/Multiplier32.v" \
-   "./src/verilog/Multiplier53.v" \
-   "./src/verilog/Multiplier4.v" \
-   "./src/verilog/Multiplier13.v" \
-   "./src/verilog/Multiplier55.v" \
-   "./src/verilog/Multiplier11.v" \
-   "./src/verilog/Multiplier57.v" \
-   "./src/verilog/Multiplier8.v" \
-   "./src/verilog/Multiplier17.v" \
-   "./src/verilog/Multiplier38.v" \
-   "./src/verilog/Multiplier59.v" \
-   "./src/verilog/Multiplier15.v" \
-   "./src/verilog/Multiplier19.v" \
+   "./src/verilog/*.v" \
    "./src/VC707_rev_2.0.ucf.xdc" \
   ]
   foreach ifile $files {
@@ -292,70 +166,7 @@ set obj [get_filesets sources_1]
 # Import local files from the original project
 set files [list \
  [file normalize "${origin_dir}/src/ip/clk_wiz_0/clk_wiz_0.xci"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier34.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier36.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier40.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier47.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier48.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier50.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier60.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier63.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier9.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier61.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier21.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier42.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier23.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier44.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier25.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier46.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier27.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier29.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier3.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier1.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier7.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier10.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier52.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier5.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier31.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier54.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier14.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier33.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier56.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier12.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier35.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier58.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier18.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier37.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier16.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier39.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier41.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier20.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier43.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier22.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier45.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier24.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier62.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier26.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier49.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier28.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier2.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier0.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier30.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier51.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier6.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier32.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier53.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier4.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier13.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier55.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier11.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier57.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier8.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier17.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier38.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier59.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier15.v"]\
- [file normalize "${origin_dir}/src/verilog/Multiplier19.v"]\
+ [file normalize "${origin_dir}/src/verilog/*.v"]\
 ]
 set imported_files [import_files -fileset sources_1 $files]
 
