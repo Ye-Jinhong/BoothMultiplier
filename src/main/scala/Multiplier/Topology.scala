@@ -60,7 +60,7 @@ trait Customize extends BaseData{
     Seq(31),
     Seq(32))
 
-  val cTypesCustom: Seq[Int] = Seq(4, 4, 4, 4, 4, 4)
+  val cTypesCustom: Seq[Int] = Seq(4, 4, 4, 4, 4, 4, 4, 4)
 }
 
 trait Topology extends Customize {
