@@ -62,6 +62,8 @@ _xmsgs/
 generated/
 null/
 .vscode/
+FPGA/log/
+FPGA/Multiplier/
 ### Eclipse template
 *.pydevproject
 .metadata
