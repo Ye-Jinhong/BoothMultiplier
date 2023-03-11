@@ -3,9 +3,10 @@ package Multiplier
 import chisel3.util._
 
 trait BaseData {
-  val w = 53
+  val w = 65
   val odd: Boolean = w % 2 == 1
   val isPipeline: Boolean = true
+  val multiClock: Boolean = true
   val n: Int = if (odd) (w + 1) / 2 else w / 2
   val ppNum: Int = n + 2
   // If you want to use Auto Generation
@@ -60,7 +61,7 @@ trait Customize extends BaseData{
     Seq(31),
     Seq(32))
 
-  val cTypesCustom: Seq[Int] = Seq(4, 4, 4, 4, 4, 4, 4)
+  val cTypesCustom: Seq[Int] = Seq(4, 4, 4, 4, 3, 3, 3)
 }
 
 trait Topology extends Customize {

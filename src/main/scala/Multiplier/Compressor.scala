@@ -122,4 +122,66 @@ object Compressor {
     }
     outputs
   }
+
+  def apply(clk2: Clock, down: Vec[Bool], in: Seq[(Value, Int)]): Seq[(Value, Int)] = {
+    // clk2 -> additional clock signal
+    // down -> pipeline valid signal
+    // in -> (value, from where)
+    // return -> (value, from where)
+    require(down.length == 2)
+    val compressorLayer = new Compressor
+    var outputs: Seq[(Value, Int)] = in
+
+    val firstLayerToPipe = compressorLayer.pipeline.head._1
+    val secondLayerToPipe = compressorLayer.pipeline.last._1
+    for (i <- 0 until compressorLayer.layerNum) {
+      val pipeLayer = for (k <- compressorLayer.pipeline if k._1 == i) yield k._2
+      if (pipeLayer.isEmpty) {
+        // This layer is no pipeline
+        outputs = compressorLayer.genLayer(i, outputs)
+      } else {
+        // Additional clock
+        val useClock2: Boolean = pipeLayer.head == 0
+        // This layer is pipeline
+        val layerDown: Bool = down(pipeLayer.head)
+        // Outputs that to pass registers
+        val outputsWire = compressorLayer.genLayer(i, outputs)
+        // Outputs that have passed registers
+        var outputsReg: Seq[(Value, Int)] = Seq()
+        // For every outputs
+        if (!useClock2) {
+          for (c <- outputsWire) {
+            val regC = RegInit(0.U(c._1.value.getWidth.W))
+            val v = Wire(new Value(c._1.value.getWidth))
+            when(layerDown) {
+              regC := c._1.value
+            }.otherwise {
+              regC := regC
+            }
+            v.offset = c._1.offset
+            v.value := regC
+            outputsReg = outputsReg ++ Seq((v, c._2))
+          }
+        } else {
+          withClock(clk2) {
+            for (c <- outputsWire) {
+              val regC = RegInit(0.U(c._1.value.getWidth.W))
+              val v = Wire(new Value(c._1.value.getWidth))
+              when(layerDown) {
+                regC := c._1.value
+              }.otherwise {
+                regC := regC
+              }
+              v.offset = c._1.offset
+              v.value := regC
+              outputsReg = outputsReg ++ Seq((v, c._2))
+            }
+          }
+        }
+        outputs = outputsReg
+      }
+    }
+    outputs
+  }
+
 }

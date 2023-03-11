@@ -6,6 +6,7 @@ import chisel3.util._
 
 class Multiplier extends Module with Topology {
   val io = IO(new Bundle {
+    val clock2 = if (multiClock) Input(Clock()) else null
     val down: Vec[Bool] = if (isPipeline) Input(Vec(pipeline.length, Bool())) else null
     val multiplicand: SInt = Input(SInt(w.W))
     val multiplier: SInt = Input(SInt(w.W))
@@ -44,8 +45,10 @@ class Multiplier extends Module with Topology {
   val compressorOutLast: Seq[Value] =
     if (!isPipeline)
       for (o <- Compressor(inputFromPP)) yield o._1
-    else
+    else if (!multiClock)
       for (o <- Compressor(io.down, inputFromPP)) yield o._1
+    else
+      for (o <- Compressor(io.clock2, io.down, inputFromPP)) yield o._1
   // There should be two value in outputs (s, ca)
   require(compressorOutLast.length == 2)
   require(compressorOutLast(1).offset == 1 && compressorOutLast(0).offset == 0)
