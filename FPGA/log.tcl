@@ -1,6 +1,6 @@
 file mkdir log/utilization/
 file mkdir log/timing/
-for {set i 0} {$i < 1} {incr i} {
+for {set i 0} {$i < 43} {incr i} {
 	set f "Multiplier"
 	append f $i
 	set_property top $f [current_fileset]
