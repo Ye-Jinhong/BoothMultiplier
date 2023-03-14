@@ -141,7 +141,7 @@ object Compressor {
         outputs = compressorLayer.genLayer(i, outputs)
       } else {
         // Additional clock
-        val useClock2: Boolean = pipeLayer.head == 0
+        val useClock2: Boolean = pipeLayer.head == 1
         // This layer is pipeline
         val layerDown: Bool = down(pipeLayer.head)
         // Outputs that to pass registers

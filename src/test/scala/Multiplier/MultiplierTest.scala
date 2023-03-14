@@ -9,20 +9,22 @@ import scala.util.Random
 
 class MultiplierTest extends AnyFreeSpec with ChiselScalatestTester with BaseData {
   "Calculate should pass" in {
+    require(debugFlag)
     val sub: Boolean = (Random.nextInt() % 2 == 1)
-//    val sub = true
+//    val sub = false
 //    println(s"sub = ${sub}")
     val multiplier: Long = Random.nextInt()
-//    val multiplier = -1
+//    val multiplier = 2
 //    println(s"multiplier = ${multiplier}")
     val multiplicand: Long = Random.nextInt()
-//    val multiplicand = -1
+//    val multiplicand = 1
 //    println(s"multiplicand = ${multiplicand}")
     val addend: Int = Random.nextInt()
+//    val addend: Int = 0
 //    println(s"addend = ${addend}")
     val product: Long = if(!sub) multiplier * multiplicand + addend else addend - multiplier * multiplicand
 //    println(s"product = ${product}")
-    test(new Multiplier()){ c =>
+    test(new Multiplier()).withAnnotations(Seq(WriteVcdAnnotation)){ c =>
       if(c.autoGenArray)
         println(s"${c.cTypes}")
       c.io.multiplier.poke(multiplier.asSInt(w.W))
@@ -31,12 +33,14 @@ class MultiplierTest extends AnyFreeSpec with ChiselScalatestTester with BaseDat
       c.io.addend.poke(addend.asSInt((w-1).W))
       if (c.isPipeline) {
         for(i <- c.pipeline.indices){
-          c.clock.step(1)
+          c.clock.step(2)
           c.io.down(i).poke(true.B)
+          if (i > 0) c.io.down(i - 1).poke(false.B)
         }
-        c.clock.step(1)
+        c.clock.step(2)
+        c.io.down(c.pipeline.length - 1).poke(false.B)
       }
-      c.clock.step(1)
+      c.clock.step(2)
       c.io.product.expect(product.asSInt((2*w).W))
     }
   }
