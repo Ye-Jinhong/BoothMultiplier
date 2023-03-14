@@ -14,6 +14,11 @@ class Multiplier extends Module with Topology {
     val sub_vld: Bool = Input(Bool())
     val product: SInt = Output(SInt((2 * w).W))
   })
+  // Debug clock
+  val clock_div = if (debugFlag) RegInit(true.B) else null
+  if (debugFlag) clock_div := ~clock_div
+  val clock2 = if (debugFlag) clock_div.asClock else null
+
   val multiplicand_not: UInt = Wire(UInt(w.W))
 
   // When calculate a-b*c, mult calculate can be extend as:
@@ -49,9 +54,6 @@ class Multiplier extends Module with Topology {
       for (o <- Compressor(io.down, inputFromPP)) yield o._1
     else {
       if (debugFlag) {
-        val clock_div = RegInit(true.B)
-        clock_div := ~clock_div
-        val clock2 = clock_div.asClock
         for (o <- Compressor(clock2, io.down, inputFromPP)) yield o._1
       } else
         for (o <- Compressor(io.clock2, io.down, inputFromPP)) yield o._1
@@ -69,10 +71,14 @@ class Multiplier extends Module with Topology {
   addend := io.addend
 
   val compressor32Out: CompressorOutput =
-    if (isLastLayerPipe)
+    if (!multiClock)
       AddAddend(w, io.down.last, sum, carry, addend)
-    else
-      AddAddend(w, sum, carry, addend)
+    else {
+      if (debugFlag)
+        AddAddend(w, clock2, io.down.last, sum, carry, addend)
+      else
+        AddAddend(w, io.clock2, io.down.last, sum, carry, addend)
+    }
 
   // Generate the mult and mult-add output
   val productMult: UInt = Wire(UInt((2 * w).W))

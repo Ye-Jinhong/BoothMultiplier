@@ -12,7 +12,7 @@ trait BaseData {
   // If you want to use Auto Generation
   // Please use `ture` to replace `false`
   val autoGenArray: Boolean = true
-  val debugFlag: Boolean = false
+  val debugFlag: Boolean = true
 }
 
 trait Customize extends BaseData{
@@ -74,9 +74,7 @@ trait Topology extends Customize {
 
   val topologyAll: Seq[((Int, Int), Int)] = genTopology()
 
-  val pipeline: Seq[(Int, Int)] = Seq((2, 0), (6, 1))
-  val isLastLayerPipe: Boolean = (pipeline.last._1 == layer.length - 1) && isPipeline
-  require(isLastLayerPipe)
+  val pipeline: Seq[(Int, Int)] = Seq((2, 0), (5, 1))
 
   private def genTopology (): Seq[((Int, Int), Int)] = {
     if (!autoGenArray) {

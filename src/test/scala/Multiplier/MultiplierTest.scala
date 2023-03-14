@@ -10,6 +10,7 @@ import scala.util.Random
 class MultiplierTest extends AnyFreeSpec with ChiselScalatestTester with BaseData {
   "Calculate should pass" in {
     require(debugFlag)
+    val clockStep = if (multiClock) 2 else 1
     val sub: Boolean = (Random.nextInt() % 2 == 1)
 //    val sub = false
 //    println(s"sub = ${sub}")
@@ -33,14 +34,14 @@ class MultiplierTest extends AnyFreeSpec with ChiselScalatestTester with BaseDat
       c.io.addend.poke(addend.asSInt((w-1).W))
       if (c.isPipeline) {
         for(i <- c.pipeline.indices){
-          c.clock.step(2)
+          c.clock.step(clockStep)
           c.io.down(i).poke(true.B)
           if (i > 0) c.io.down(i - 1).poke(false.B)
         }
-        c.clock.step(2)
+        c.clock.step(clockStep)
         c.io.down(c.pipeline.length - 1).poke(false.B)
       }
-      c.clock.step(2)
+      c.clock.step(clockStep)
       c.io.product.expect(product.asSInt((2*w).W))
     }
   }
